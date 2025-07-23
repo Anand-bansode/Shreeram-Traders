@@ -1,0 +1,70 @@
+<% layout("layouts/boilerplate") %>
+<style>
+        @media (max-width: 750px) {
+            .container {
+                padding-top: 120px !important;
+            }
+        }
+    </style>
+<section style="background: linear-gradient(to right, #fdfcfb, #e2d1c3); padding: 180px 0;">
+  <div class="container" style="max-width: 800px; margin: auto;">
+    <h2 style="text-align: center; font-size: 2.5rem; color: #b62d2d; margin-bottom: 30px;">🛒 Place Your Order</h2>
+
+    <form id="orderForm" style="background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="tel" name="phone" placeholder="Phone Number" required>
+        <input type="text" name="address" placeholder="Delivery Address" required>
+
+        <div id="productList">
+          <div class="productItem">
+            <input type="text" name="productName" placeholder="Product Name" required>
+            <input type="text" name="productQty" placeholder="Quantity" required>
+          </div>
+        </div>
+
+        <button type="button" onclick="addProduct()" style="background: #3498db; color: white; padding: 8px; border: none; border-radius: 4px;">➕ Add Product</button>
+
+        <button type="submit" style="background: #27ae60; color: white; padding: 10px; font-size: 1.1rem; border: none; border-radius: 6px;">
+          📲 Send Order on WhatsApp
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  function addProduct() {
+    const div = document.createElement("div");
+    div.classList.add("productItem");
+    div.style.marginTop = "10px";
+    div.innerHTML = `
+      <input type="text" name="productName" placeholder="Product Name" required>
+      <input type="text" name="productQty" placeholder="Quantity" required>
+    `;
+    document.getElementById("productList").appendChild(div);
+  }
+
+  document.getElementById("orderForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const name = document.querySelector("input[name='name']").value;
+    const phone = document.querySelector("input[name='phone']").value;
+    const address = document.querySelector("input[name='address']").value;
+
+    const productNames = document.querySelectorAll("input[name='productName']");
+    const productQtys = document.querySelectorAll("input[name='productQty']");
+
+    let msg = `🛒 *New Order*\n\n👤 Name: ${name}\n📞 Phone: ${phone}\n🏠 Address: ${address}\n\n📦 *Products:*`;
+
+    for (let i = 0; i < productNames.length; i++) {
+      msg += `\n${i + 1}. ${productNames[i].value} - ${productQtys[i].value}`;
+    }
+
+    const encodedMsg = encodeURIComponent(msg);
+    const whatsappNumber = "7276045536"; // ✅ तुझा नंबर टाका
+    const url = `https://wa.me/${whatsappNumber}?text=${encodedMsg}`;
+
+    window.open(url, "_blank");
+  });
+</script>

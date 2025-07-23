@@ -1,0 +1,161 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }body {
+  background: linear-gradient(to right, #f9f9f9, #fefefe);
+  color: #333;
+
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+.about-header {
+  text-align: center;
+  color: #b62d2d;
+  margin-bottom: 40px;
+}
+
+.about-header h1 {
+  font-size: 2.8rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.image-section {
+  flex: 1;
+  min-width: 280px;
+}
+
+.image-section img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.text-section {
+  flex: 1;
+  min-width: 280px;
+}
+
+.text-section h2 {
+  font-size: 2rem;
+  color: #b62d2d;
+  margin-bottom: 20px;
+}
+
+.text-section p,
+.text-section li {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+.text-section ul {
+  padding-left: 20px;
+}
+
+blockquote {
+  background-color: #fff8f0;
+  border-left: 6px solid #b62d2d;
+  padding: 15px;
+  font-style: italic;
+  margin: 20px 0;
+}
+
+.cta {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.cta a {
+  background-color: #b62d2d;
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.cta a:hover {
+  background-color: #a02222;
+}
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .about-header h1 {
+    font-size: 2rem;
+  }
+}
+
+  </style>
+
+<body>
+<div class="container" style="padding-top: 180px;">
+    <style>
+        @media (max-width: 750px) {
+            .container {
+                padding-top: 310px !important;
+            }
+        }
+    </style>
+    <div class="about-header">
+      <h1>About Shree Ram Trader</h1>
+      <p>Your Trusted Grocery Partner Since 2013</p>
+    </div><div class="row">
+  <div class="image-section">
+    <img src="/imgs/godown.jpeg" alt="Our Shop">
+  </div>
+
+  <div class="text-section">
+    <h2>Who We Are</h2>
+    <p>
+      Shree Ram Trader is a family-run grocery store delivering fresh, quality, and affordable products to local communities since 2013. We specialize in grains, pulses, oil, and daily home essentials.
+    </p>
+
+    <h2>Our Mission</h2>
+    <p>
+      To deliver trustworthy, cost-effective groceries with a smile, while building long-term relationships with our customers.
+    </p>
+
+    <h2>Why Choose Us?</h2>
+    <ul>
+      <li>10+ Years of Customer Trust</li>
+      <li>Best Prices in Town</li>
+      <li>Quick Service & Home Delivery</li>
+      <li>Friendly, Family-Owned Business</li>
+    </ul>
+
+    <h2>Customer Reviews</h2>
+    <blockquote>
+      "Very friendly staff and great prices. Always a smooth shopping experience!"<br>
+      — <strong>Santosh J.</strong>
+    </blockquote>
+  </div>
+</div>
+
+<div class="cta">
+  <a href="/contact">📞 Contact Us Now</a>
+</div>
+
+  </div>
+</body>

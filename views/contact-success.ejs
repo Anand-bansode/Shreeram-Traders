@@ -1,0 +1,31 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<style>
+    .contact-success {
+        max-width: 500px;
+        margin: 60px auto;
+        padding: 32px;
+        padding-top: 180px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        text-align: center;
+        font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .contact-success h2 {
+        color: #2d7c2d;
+        margin-bottom: 18px;
+    }
+    .contact-success p {
+        color: #333;
+        font-size: 1.1em;
+    }
+  @media (max-width: 750px) {
+            .contact-success {
+                padding-top: 120px !important;
+            }
+        }
+</style>
+<div class="contact-success">
+    <h2>Thank you, <%= name %>!</h2>
+    <p>Your message has been sent successfully. We'll get back to you soon.</p>
+</div>

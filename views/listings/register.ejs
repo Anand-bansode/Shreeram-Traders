@@ -1,0 +1,56 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<style>
+    .register-form-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+        padding-top: 200px;
+    }
+    .register-form {
+        background: #fff;
+        padding: 32px 24px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        max-width: 350px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .register-form input {
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .register-form button {
+        padding: 10px;
+        font-size: 1rem;
+        background: #1976d2;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    @media (max-width: 500px) {
+        .register-form {
+             padding-top: 120px !important;
+            max-width: 100%;
+        }
+    }
+    
+  @media (max-width: 750px) {
+            .register-form-container{
+                padding-top: 120px !important;
+            }
+        }
+</style>
+<div class="register-form-container">
+    <form class="register-form" method="POST" action="/register">
+        <h3>Register Now</h3>
+        <input type="text" name="username" placeholder="Create Username" required>
+        <input type="password" name="password" placeholder="Create Password" required>
+        <button type="submit">Register</button>
+    </form>
+</div>

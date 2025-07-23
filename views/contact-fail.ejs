@@ -1,0 +1,33 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<style>
+    .contact-fail-container {
+        max-width: 400px;
+        margin: 60px auto;
+        padding: 32px;
+        padding-top: 190px;
+        background: #fff3f3;
+        border: 1px solid #ffcccc;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(255, 0, 0, 0.08);
+    }
+    .contact-fail-container h2 {
+        color: #d32f2f;
+        margin-bottom: 16px;
+    }
+    .contact-fail-container p {
+        color: #333;
+        font-size: 1.1em;
+    }
+      @media (max-width: 750px) {
+            .contact-fail-container {
+                padding-top: 210px !important;
+            }
+        }
+</style>
+
+<div class="contact-fail-container">
+    <h2>Oops!</h2>
+    <p><%= error %></p>
+</div>
