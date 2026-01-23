@@ -1,7 +1,159 @@
 <% layout("/layouts/boilerplate.ejs") %>
 
 <style>
-  body {
+  .hero-section {
+  margin-top: 185px;
+  height: 600px;
+  background-image: url("https://images.unsplash.com/photo-1586201375761-83865001e31c");
+  background-size: cover;
+  background-position: center;
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+.hero-overlay {
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  text-align: center;
+  padding: 40px 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-overlay h1 {
+  font-size: 3.2rem;
+  margin-bottom: 10px;
+}
+
+.hero-overlay p {
+  font-size: 1.3rem;
+  margin-bottom: 25px;
+  opacity: 0.9;
+}
+
+/* Buttons */
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 35px;
+}
+
+.btn-primary, .btn-secondary {
+  padding: 12px 28px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn-primary {
+  background: #b62d2d;
+  color: white;
+}
+
+.btn-secondary {
+  background: #25D366;
+  color: white;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+  transform: translateY(-3px);
+}
+
+/* Stats */
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.hero-stats h3 {
+  font-size: 2rem;
+  color: #ffcccb;
+}
+
+.hero-stats span {
+  font-size: 0.95rem;
+}
+
+/* Cards */
+.hero-cards {
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-card {
+  background: white;
+  color: black;
+  width: 220px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  transition: 0.4s;
+}
+
+.hero-card:hover {
+  transform: translateY(-10px);
+}
+
+.hero-card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.hero-card h4 {
+  padding: 15px;
+  color: #b62d2d;
+}
+
+/* Brand strip */
+.brand-strip {
+  margin: 50px auto;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  opacity: 0.8;
+}
+
+.brand-strip img {
+  height: 45px;
+  filter: grayscale(100%);
+  transition: 0.3s;
+}
+
+.brand-strip img:hover {
+  filter: grayscale(0);
+  transform: scale(1.1);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .hero-section {
+    height: auto;
+    padding-bottom: 40px;
+  }
+
+  .hero-overlay h1 {
+    font-size: 2.2rem;
+  }
+
+  .hero-stats {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+
+   body {
     margin: 0;
     padding: 0;
     background-color: #1f3f5f;
@@ -11,7 +163,7 @@
     height: 350px;
     width: 30%;
     object-fit: cover;
-    border-radius: 0px 40px 40px 0px; /* Top-right & Bottom-left */
+    border-radius: 0px 40px 40px 0px; 
   }
 
   .carousel-caption {
@@ -37,7 +189,84 @@
   background-image: url('/imgs/one.jpg');
   background-size: contain;
     padding: 20px;
+  } 
+  .full-width-bg {
+  width: 100%;
+  background-color: aliceblue;
+  padding: 40px 0;
+} 
+
+/* Slider container */
+ #boxCarousel {
+  width: 95%;
+  max-width: 1580px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 18px;
+  background-image: url('/imgs/one.jpg');
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+} */
+
+/* Row */
+.slide-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* Image Box */
+.img-box {
+  flex: 1;
+  height: 320px;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.img-box:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+}
+
+/* Image */
+.img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;   /* 🔥 product images perfect */
+  padding: 15px;
+}
+
+/* Caption */
+.carousel-caption {
+  background: rgba(0,0,0,0.6);
+  padding: 10px 25px;
+  border-radius: 12px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .slide-row {
+    flex-direction: column;
   }
+
+  .img-box {
+    height: 250px;
+  }
+}
+
+/* Extra top spacing fix */
+@media (max-width: 750px) {
+  .full-width-bg {
+    padding-top: 210px !important;
+  }
+}
+
   /*  */
 .product-img {
   width: 100%;
@@ -154,8 +383,10 @@ p,li{
 </style>
 
 
+
+
 <div class="full-width-bg">
-  <div class="container-fluid" style="margin-top: 80px; padding-top: 50px;">
+  <div class="container-fluid" style="margin-top: 80px; padding-top: 75px;">
     <div id="boxCarousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
 <style>
@@ -181,9 +412,9 @@ p,li{
         <!-- Slide 2 -->
         <div class="carousel-item">
           <div style="display: flex; justify-content: space-evenly;">
-            <img src="https://th.bing.com/th/id/OIP._SvPOTOk_JxRIHhGJFpKdwHaE8?pid=ImgDetMain" alt="Box 2">
-            <img src="https://th.bing.com/th/id/OIP._SvPOTOk_JxRIHhGJFpKdwHaE8?pid=ImgDetMain" alt="Box 2">
-            <img src="https://th.bing.com/th/id/OIP._SvPOTOk_JxRIHhGJFpKdwHaE8?pid=ImgDetMain" alt="Box 2">
+            <img src="/imgs/fortune.jpeg" alt="Box 2">
+            <img src="/imgs/ok.jpg" alt="Box 2">
+            <img src="/imgs/fortuneATA.jpeg" alt="Box 2">
           </div>
           <div class="carousel-caption d-none d-md-block">
             <h5>Heavy-Duty Crates</h5>
@@ -193,9 +424,9 @@ p,li{
         <!-- Slide 3 -->
         <div class="carousel-item">
           <div style="display: flex; justify-content: space-evenly;">
-            <img src="https://th.bing.com/th/id/OIP._SvPOTOk_JxRIHhGJFpKdwHaE8?pid=ImgDetMain" alt="Box 3">
-            <img src="https://th.bing.com/th/id/OIP._SvPOTOk_JxRIHhGJFpKdwHaE8?pid=ImgDetMain" alt="Box 3">
-            <img src="https://th.bing.com/th/id/OIP._SvPOTOk_JxRIHhGJFpKdwHaE8?pid=ImgDetMain" alt="Box 3">
+            <img src="/imgs/sunnyOil.jpg" alt="Box 3">
+            <img src="/imgs/tatasaalt.png" alt="Box 3">
+            <img src="/imgs/KIT.png" alt="Box 3">
           </div>
           <div class="carousel-caption d-none d-md-block">
             <h5>Export Quality Boxes</h5>
@@ -218,6 +449,7 @@ p,li{
     </div>
   </div>
 </div>
+
 
 <!--  -->
 <section class="products-section py-4 container" style="background-color: #d4e2f1; margin-top: 10px;">
@@ -280,7 +512,7 @@ p,li{
     </div>
     <div class="col-6 col-sm-4 col-md-3 text-center">
       <img src="/imgs/kaju.webp" class="product-img" alt="तेल">
-      <p class="product-text">Kaju</p>
+      <p class="product-text">Cashew</p>
     </div>
     <div class="col-6 col-sm-4 col-md-3 text-center">
       <img src="/imgs/badam.webp" class="product-img" alt="बिस्किटे">

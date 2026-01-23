@@ -1,0 +1,280 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<style>
+/* ===== PAGE WRAPPER ===== */
+.profile-page {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 160px 20px 60px;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-page::before {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+  top: -50px;
+  left: -50px;
+}
+
+.profile-page::after {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: rgba(245, 245, 243, 0.08);
+  border-radius: 50%;
+  animation: float 8s ease-in-out infinite reverse;
+  bottom: -100px;
+  right: -100px;
+ 
+}
+
+/* ===== PROFILE CARD ===== */
+.profile-box {
+  width: 100%;
+  max-width: 520px;
+  background: rgba(255, 255, 255, 0.95);
+  
+  padding: 40px;
+  border-radius: 25px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  animation: fadeUp 0.8s ease, pulse 2s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+/* ===== HEADING ===== */
+.profile-box h2 {
+  margin-bottom: 30px;
+  font-size: 32px;
+  background: linear-gradient(135deg, #ee7752, #e73c7e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: slideDown 0.6s ease;
+}
+
+/* ===== PROFILE ITEMS ===== */
+.profile-item {
+  margin-bottom: 20px;
+  text-align: left;
+  padding: 15px;
+  border-left: 4px solid #23a6d5;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(35, 166, 213, 0.05), rgba(35, 213, 171, 0.05));
+  animation: slideIn 0.6s ease forwards;
+  opacity: 0;
+}
+
+.profile-item:nth-child(1) { animation-delay: 0.1s; }
+.profile-item:nth-child(2) { animation-delay: 0.2s; }
+.profile-item:nth-child(3) { animation-delay: 0.3s; }
+.profile-item:nth-child(4) { animation-delay: 0.4s; }
+.profile-item:nth-child(5) { animation-delay: 0.5s; }
+.profile-item:nth-child(6) { animation-delay: 0.6s; }
+.profile-item:nth-child(7) { animation-delay: 0.7s; }
+
+.profile-item:hover {
+  border-left-color: #e73c7e;
+  transform: translateX(5px);
+  box-shadow: 0 5px 15px rgba(231, 60, 126, 0.2);
+}
+
+.profile-item label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, #23a6d5, #23d5ab);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 13px;
+}
+
+.profile-item span {
+  color: #333;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.profile-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 35px;
+  flex-wrap: wrap;
+  animation: slideUp 0.8s ease 0.8s forwards;
+  opacity: 0;
+}
+
+.btn {
+  padding: 12px 28px;
+  border-radius: 30px;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+}
+
+.edit {
+  background: linear-gradient(135deg, #23a6d5, #23d5ab);
+}
+
+.edit:hover {
+  box-shadow: 0 12px 25px rgba(35, 166, 213, 0.4);
+}
+
+.back {
+  background: linear-gradient(135deg, #ee7752, #e73c7e);
+}
+
+.back:hover {
+  box-shadow: 0 12px 25px rgba(231, 60, 126, 0.4);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(30px); }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3); }
+  50% { box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4); }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 600px) {
+  .profile-box {
+    padding: 30px 20px;
+  }
+
+  .profile-box h2 {
+    font-size: 26px;
+  }
+}
+</style>
+<style>
+   @media (max-width: 750px) {
+    .profile-page {
+        padding-top: 250px !important;
+    }
+}
+</style>
+<!-- ===== PAGE CONTENT ===== -->
+<div class="profile-page">
+  <div class="profile-box">
+    <h2>👤 My Profile</h2>
+
+    <div class="profile-item">
+      <label>Owner Name</label>
+      <span><%= user.ownerName || "-" %></span>
+    </div>
+
+    <div class="profile-item">
+      <label>Store Name</label>
+      <span><%= user.storeName || "-" %></span>
+    </div>
+
+    <div class="profile-item">
+      <label>Email</label>
+      <span><%= user.email %></span>
+    </div>
+
+    <div class="profile-item">
+      <label>Phone</label>
+      <span><%= user.phone || "-" %></span>
+    </div>
+
+    <div class="profile-item">
+      <label>Address</label>
+      <span><%= user.address || "-" %></span>
+    </div>
+
+    <div class="profile-item">
+      <label>Account Created</label>
+      <span><%= user.createdAt ? user.createdAt.toDateString() : "N/A" %></span>
+    </div>
+
+    <div class="profile-item">
+      <label>Total Orders</label>
+      <span><strong><%= totalOrders || 0 %></strong></span>
+    </div>
+
+    <div class="profile-actions">
+      <a class="btn back" href="/user/dashboard">⬅ Back</a>
+    </div>
+  </div>
+</div>

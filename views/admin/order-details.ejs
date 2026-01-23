@@ -1,0 +1,58 @@
+<% layout('admin/layout') %>
+
+<h2 class="mb-3">Order Details</h2>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h5>Customer Info</h5>
+    <p><b>Name:</b> <%= order.customerName %></p>
+    <p><b>Mobile:</b> <%= order.mobile %></p>
+    <p><b>Address:</b> <%= order.address %></p>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h5>Products</h5>
+
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% order.products.forEach(p => { %>
+          <tr>
+            <td><%= p.productName %></td>
+            <td><%= p.quantity %></td>
+            <td>₹<%= p.price %></td>
+            <td>₹<%= p.quantity * p.price %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <h5 class="text-end">Grand Total: ₹<%= order.totalAmount %></h5>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <h5>Update Status</h5>
+
+    <form action="/admin/orders/status/<%= order._id %>" method="POST">
+      <select name="status" class="form-select mb-3">
+        <option value="Pending" <%= order.status === "Pending" ? "selected" : "" %>>Pending</option>
+        <option value="Delivered" <%= order.status === "Delivered" ? "selected" : "" %>>Delivered</option>
+        <option value="Cancelled" <%= order.status === "Cancelled" ? "selected" : "" %>>Cancelled</option>
+      </select>
+
+      <button class="btn btn-success">Update Status</button>
+      <a href="/admin/orders" class="btn btn-secondary ms-2">⬅ Back</a>
+    </form>
+  </div>
+</div>

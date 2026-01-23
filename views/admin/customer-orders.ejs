@@ -1,0 +1,41 @@
+<% layout('admin/layout') %>
+
+<h2 class="mb-3">Orders – <%= mobile %></h2>
+
+<table class="table table-bordered">
+  <thead class="table-dark">
+    <tr>
+      <th>#</th>
+      <th>Total (₹)</th>
+      <th>Status</th>
+      <th>Date</th>
+      <th>View</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if (orders.length === 0) { %>
+      <tr>
+        <td colspan="5" class="text-center">No orders found</td>
+      </tr>
+    <% } %>
+
+    <% orders.forEach((o, i) => { %>
+      <tr>
+        <td><%= i + 1 %></td>
+        <td><%= o.totalAmount %></td>
+        <td>
+          <span class="badge bg-info"><%= o.status %></span>
+        </td>
+        <td><%= o.createdAt.toLocaleDateString() %></td>
+        <td>
+          <a href="/admin/orders/<%= o._id %>" class="btn btn-sm btn-secondary">
+            View
+          </a>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<a href="/admin/customers" class="btn btn-secondary mt-3">⬅ Back</a>

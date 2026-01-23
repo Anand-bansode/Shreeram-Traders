@@ -1,0 +1,66 @@
+
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 12px;
+    text-align: left;
+  }
+  th {
+    background: #b62d2d;
+    color: white;
+  }
+  tr:nth-child(even) {
+    background: #f9f9f9;
+  }
+  .container {
+    padding: 150px 20px;
+  }
+  h2 {
+    text-align: center;
+    color: #b62d2d;
+  }
+</style>
+
+<div class="container mt-5">
+  <h2>📦 All Orders</h2>
+
+  <% if (orders.length === 0) { %>
+    <p style="text-align:center; margin-top:20px;">No orders found.</p>
+  <% } else { %>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Address</th>
+        <th>Products</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% orders.forEach(order => { %>
+        <tr>
+          <td><%= order.name %></td>
+          <td><%= order.phone %></td>
+          <td><%= order.address %></td>
+          <td>
+            <ul>
+              <% order.products.forEach(p => { %>
+                <li><%= p.name %> — <%= p.quantity %></li>
+              <% }) %>
+            </ul>
+          </td>
+          <td><%= order.createdAt.toLocaleString() %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <% } %>
+</div> -->

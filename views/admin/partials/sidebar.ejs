@@ -1,0 +1,145 @@
+
+<!-- 
+<div class="col-md-2 bg-dark text-white min-vh-100 pt-4">
+  <h5 class="text-center mb-4">ShreeRam Traders</h5>
+
+  <ul class="nav flex-column">
+    <li class="nav-item mb-2">
+      <a href="/admin" class="nav-link text-white">Dashboard</a>
+    </li>
+
+    <li class="nav-item mb-2">
+      <a href="/admin/orders" class="nav-link text-white">Orders</a>
+    </li>
+
+    <li class="nav-item mb-2">
+      <a href="/admin/products" class="nav-link text-white">Products</a>
+    </li>
+
+      <li class="nav-item mb-2">
+      <a href="/admin/customers" class="nav-link text-white">Customers</a>
+    </li>
+
+
+    <li class="nav-item mt-4">
+      <a href="/logout" class="nav-link text-danger">Logout</a>
+    </li>
+  </ul>
+</div> -->
+
+
+<div class="col-md-2 bg-dark text-white min-vh-100 pt-4 position-relative overflow-hidden">
+  <!-- Animated background pattern -->
+  <div class="position-absolute top-0 start-0 w-100 h-100" style="
+    background: radial-gradient(circle at 20% 30%, rgba(102, 126, 234, 0.3) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(118, 75, 162, 0.2) 0%, transparent 25%);
+    z-index: 1;
+  "></div>
+
+  <div class="position-relative z-2">
+    <h5 class="text-center mb-4 fw-bold" style="
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    ">ShreeRam Traders</h5>
+
+    <ul class="nav flex-column px-2">
+      <li class="nav-item mb-2">
+        <a href="/admin" class="nav-link text-white rounded d-flex align-items-center p-3 position-relative overflow-hidden" style="
+          background: rgba(255,255,255,0.1);
+          border-left: 3px solid #667eea;
+          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border 0;
+        ">
+          <i class="fas fa-tachometer-alt me-2 fs-5"></i>
+          <span class="fw-semibold">Dashboard</span>
+          <span class="position-absolute top-0 end-0 opacity-0 scale-0 transition-all-03"
+                style="transform: translateX(10px); background: #667eea; border-radius: 4px; padding: 2px 6px; font-size: 10px;">Admin</span>
+        </a>
+      </li>
+
+      <li class="nav-item mb-2">
+        <a href="/admin/orders" class="nav-link text-white rounded d-flex align-items-center p-3 position-relative overflow-hidden" style="
+          background: rgba(255,255,255,0.1);
+          border-left: 3px solid #ffc107;
+          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border 0;
+        ">
+          <i class="fas fa-shopping-cart me-2 fs-5"></i>
+          <span class="fw-semibold">Orders</span>
+          <span class="position-absolute top-0 end-0 opacity-0 scale-0 transition-all-03"
+                style="transform: translateX(10px); background: #ffc107; border-radius: 4px; padding: 2px 6px; font-size: 10px;">TO</span>
+        </a>
+      </li>
+
+      <li class="nav-item mb-2">
+        <a href="/admin/products" class="nav-link text-white rounded d-flex align-items-center p-3 position-relative overflow-hidden" style="
+          background: rgba(255,255,255,0.1);
+          border-left: 3px solid #198754;
+          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border 0;
+        ">
+          <i class="fas fa-boxes me-2 fs-5"></i>
+          <span class="fw-semibold">Products</span>
+          <span class="position-absolute top-0 end-0 opacity-0 scale-0 transition-all-03"
+                style="transform: translateX(10px); background: #198754; border-radius: 4px; padding: 2px 6px; font-size: 10px;">All</span>
+        </a>
+      </li>
+
+      <li class="nav-item mb-2">
+        <a href="/admin/customers" class="nav-link text-white rounded d-flex align-items-center p-3 position-relative overflow-hidden" style="
+          background: rgba(255,255,255,0.1);
+          border-left: 3px solid #0d6efd;
+          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border 0;
+        ">
+          <i class="fas fa-users me-2 fs-5"></i>
+          <span class="fw-semibold">Customers</span>
+          <span class="position-absolute top-0 end-0 opacity-0 scale-0 transition-all-03"
+                style="transform: translateX(10px); background: #0d6efd; border-radius: 4px; padding: 2px 6px; font-size: 10px;">CRM</span>
+        </a>
+      </li>
+
+      <li class="nav-item mt-4">
+        <a href="/logout" class="nav-link text-danger rounded d-flex align-items-center p-3 position-relative overflow-hidden" style="
+          background: rgba(255,0,0,0.1);
+          border-left: 3px solid #dc3545;
+          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border 0;
+        ">
+          <i class="fas fa-sign-out-alt me-2 fs-5"></i>
+          <span class="fw-semibold">Logout</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<style>
+/* Smooth hover entrance animation */
+.nav-link {
+  transform: translateX(0);
+}
+.nav-link:hover {
+  background: rgba(255,255,255,0.2) !important;
+  transform: translateX(-4px);
+}
+.nav-link:hover span:last-child {
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+  transform: translateY(0) !important;
+}
+
+/* Sidebar item animation */
+.nav-link span:last-child {
+  transform: translateX(10px) translateY(0) !important;
+}
+.transition-all-03 {
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.scale-0 {
+  transform: scale(0) !important;
+}
+
+/* Keep Gradients and Effects */
+.nav-link {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(5px);
+}
+</style>

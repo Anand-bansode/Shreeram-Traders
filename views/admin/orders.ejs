@@ -1,0 +1,302 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+  :root {
+    --primary: #0d6efd;
+    --success: #198754;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --light: #f8f9fa;
+    --dark: #212529;
+  }
+
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .main-content {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  }
+
+  h2 {
+    color: var(--dark);
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Form styling */
+  form[method="GET"] {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+
+  form[method="GET"] .form-control, form[method="GET"] .form-select {
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+  }
+
+  form[method="GET"] .form-control:focus, form[method="GET"] .form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+  }
+
+  form[method="GET"] .form-control::placeholder {
+    color: #6c757d;
+    opacity: 0.8;
+  }
+
+  form[method="GET"] .btn {
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-weight: 600;
+    border: none;
+  }
+
+  /* Table styling */
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  }
+
+  th {
+    background: linear-gradient(135deg, var(--primary), #0a58ca);
+    color: white;
+    padding: 16px;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    padding: 16px;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 14px;
+    color: #495057;
+  }
+
+  tr:hover {
+    background: #f8f9fa;
+    transform: scale(1.01);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  }
+
+  .status-select {
+    border: 2px solid var(--primary);
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 14px;
+    background: white;
+    color: var(--dark);
+    transition: all 0.3s ease;
+  }
+
+  .status-select:focus {
+    outline: none;
+    border-color: #0a58ca;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+  }
+
+  /* Buttons */
+  #view {
+    padding: 8px 16px;
+    border: 2px solid var(--primary);
+    border-radius: 12px;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    background: white;
+    transition: all 0.3s ease;
+  }
+
+  #view:hover {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
+  }
+
+  button[type="submit"] {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(220, 53, 69, 0.3);
+  }
+
+  .actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 1.3rem;
+    }
+
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+
+    thead {
+      display: none;
+    }
+
+    tr {
+      margin-bottom: 20px;
+      padding: 20px;
+      border: 2px solid #e9ecef;
+      border-radius: 12px;
+    }
+
+    td {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border: none;
+    }
+
+    td::before {
+      content: attr(data-label) ": ";
+      font-weight: 600;
+      min-width: 100px;
+      color: var(--dark);
+    }
+  }
+</style>
+
+<div class="container-fluid" style="padding-top: 170px;">
+  <div class="row">
+    <%- include("partials/sidebar") %>
+
+    <div class="col-md-10 p-4">
+      <div class="main-content animate__animated animate__fadeIn">
+        <h2 class="animate__animated animate__fadeInUp">
+          <i class="fas fa-boxes"></i> All Orders
+        </h2>
+
+        <!-- Filter Form -->
+        <form method="GET" action="/admin/orders" class="row g-3 animate__animated animate__fadeInUp animate__delay-1s">
+          <div class="col-md-3">
+            <input
+              type="text"
+              name="search"
+              class="form-control"
+              placeholder="Search Store / Email / Phone"
+              value="<%= search || '' %>"
+            />
+          </div>
+
+          <div class="col-md-2">
+            <input
+              type="date"
+              name="from"
+              class="form-control"
+              value="<%= from || '' %>"
+            />
+          </div>
+
+          <div class="col-md-2">
+            <input
+              type="date"
+              name="to"
+              class="form-control"
+              value="<%= to || '' %>"
+            />
+          </div>
+
+          <div class="col-md-2">
+            <select name="status" class="form-select">
+              <option value="All">All Status</option>
+              <option value="Pending" <%= status==="Pending"?"selected":"" %>>Pending</option>
+              <option value="Delivered" <%= status==="Delivered"?"selected":"" %>>Delivered</option>
+              <option value="Cancelled" <%= status==="Cancelled"?"selected":"" %>>Cancelled</option>
+            </select>
+          </div>
+
+          <div class="col-md-2">
+            <button class="btn btn-primary w-100">Filter</button>
+          </div>
+        </form>
+
+        <!-- Orders Table -->
+        <table class="animate__animated animate__fadeIn animate__delay-2s">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Item</th>
+              <th>Qty</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% orders.forEach((order, idx) => { %>
+              <tr class="animate__animated animate__fadeInUp" style="animation-delay: <%= (idx * 0.1) + 0.8 %>s">
+                <td data-label="Name"><%= order.name %></td>
+                <td data-label="Phone"><%= order.phone %></td>
+                <td data-label="Item"><%= order.item %></td>
+                <td data-label="Qty"><%= order.quantity %></td>
+                <td data-label="Status">
+                  <form method="POST" action="/admin/orders/<%= order._id %>/status" style="display:inline">
+                    <select name="status" class="status-select" onchange="this.form.submit()">
+                      <option <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                      <option <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                      <option <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                    </select>
+                  </form>
+                </td>
+                <td data-label="Date"><%= order.createdAt.toDateString() %></td>
+                <td data-label="Actions" class="actions">
+                  <a id="view" href="/admin/orders/<%= order._id %>">
+                    <i class="fas fa-eye me-1"></i> View
+                  </a>
+                  <form method="POST"
+                        action="/admin/orders/<%= order._id %>/delete"
+                        style="display:inline"
+                        onsubmit="return confirm('Delete this order?')">
+                    <button type="submit">
+                      <i class="fas fa-trash me-1"></i> Delete
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

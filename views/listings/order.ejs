@@ -1,29 +1,137 @@
 <% layout("layouts/boilerplate") %>
-<style>
-        @media (max-width: 750px) {
-            .container {
-                padding-top: 120px !important;
-            }
-        }
-    </style>
-<section style="background: linear-gradient(to right, #fdfcfb, #e2d1c3); padding: 180px 0;">
-  <div class="container" style="max-width: 800px; margin: auto;">
-    <h2 style="text-align: center; font-size: 2.5rem; color: #b62d2d; margin-bottom: 30px;">🛒 Place Your Order</h2>
 
-    <form id="orderForm" style="background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+<style>
+  @media (max-width: 750px) {
+    .container {
+      padding-top: 20px !important;
+    }
+  }
+
+  section {
+    background: linear-gradient(to right, #fdfcfb, #e2d1c3);
+    padding-top: 200px;
+    animation: fadeIn 0.9s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  form {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  form:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+
+  input {
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  input:focus {
+    border-color: #b62d2d;
+    box-shadow: 0 0 8px rgba(182, 45, 45, 0.3);
+    outline: none;
+  }
+
+  .productItem {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    animation: slideIn 0.5s ease;
+  }
+
+  @keyframes slideIn {
+    0% { opacity: 0; transform: translateX(-20px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+
+  button {
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s ease, background 0.3s ease;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+  }
+
+  button[type="button"] {
+    background: #3498db;
+    color: white;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+  }
+
+  button[type="submit"] {
+    background: #27ae60;
+    color: white;
+    padding: 10px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 6px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .container {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+
+    form {
+      padding: 24px;
+    }
+
+    input {
+      font-size: 0.95rem;
+      padding: 10px 12px;
+    }
+
+    button[type="submit"] {
+      font-size: 1rem;
+      padding: 10px 40px;
+    }
+  }
+</style>
+
+<section style="background: linear-gradient(to right, #fdfcfb, #e2d1c3); padding-top: 200px;">
+  <div class="container" style="max-width: 800px; margin: auto;">
+    <h2 style="text-align: center; font-size: 2.5rem; color: #b62d2d; margin-bottom: 30px;">
+      🛒 Place Your Order
+    </h2>
+
+    <form id="orderForm" action="/save-order" method="POST" style="background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
       <div style="display: flex; flex-direction: column; gap: 20px;">
+
         <input type="text" name="name" placeholder="Your Name" required>
         <input type="tel" name="phone" placeholder="Phone Number" required>
+        <input type="email" name="email" placeholder="Enter your email" required>
+        <input type="text" name="storeName" placeholder="Store Name" required>
         <input type="text" name="address" placeholder="Delivery Address" required>
 
         <div id="productList">
           <div class="productItem">
-            <input type="text" name="productName" placeholder="Product Name" required>
-            <input type="text" name="productQty" placeholder="Quantity" required>
+            <input type="text" name="productName[]" placeholder="Product Name" required>
+            <input type="text" name="productQty[]" placeholder="Quantity" required>
           </div>
         </div>
 
-        <button type="button" onclick="addProduct()" style="background: #3498db; color: white; padding: 8px; border: none; border-radius: 4px;">➕ Add Product</button>
+        <button type="button" onclick="addProduct()" style="background: #3498db; color: white; padding: 8px; border: none; border-radius: 4px;">
+          ➕ Add Product
+        </button>
 
         <button type="submit" style="background: #27ae60; color: white; padding: 10px; font-size: 1.1rem; border: none; border-radius: 6px;">
           📲 Send Order on WhatsApp
@@ -39,32 +147,9 @@
     div.classList.add("productItem");
     div.style.marginTop = "10px";
     div.innerHTML = `
-      <input type="text" name="productName" placeholder="Product Name" required>
-      <input type="text" name="productQty" placeholder="Quantity" required>
+      <input type="text" name="productName[]" placeholder="Product Name" required>
+      <input type="text" name="productQty[]" placeholder="Quantity" required>
     `;
     document.getElementById("productList").appendChild(div);
   }
-
-  document.getElementById("orderForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const name = document.querySelector("input[name='name']").value;
-    const phone = document.querySelector("input[name='phone']").value;
-    const address = document.querySelector("input[name='address']").value;
-
-    const productNames = document.querySelectorAll("input[name='productName']");
-    const productQtys = document.querySelectorAll("input[name='productQty']");
-
-    let msg = `🛒 *New Order*\n\n👤 Name: ${name}\n📞 Phone: ${phone}\n🏠 Address: ${address}\n\n📦 *Products:*`;
-
-    for (let i = 0; i < productNames.length; i++) {
-      msg += `\n${i + 1}. ${productNames[i].value} - ${productQtys[i].value}`;
-    }
-
-    const encodedMsg = encodeURIComponent(msg);
-    const whatsappNumber = "7276045536"; // ✅ तुझा नंबर टाका
-    const url = `https://wa.me/${whatsappNumber}?text=${encodedMsg}`;
-
-    window.open(url, "_blank");
-  });
 </script>

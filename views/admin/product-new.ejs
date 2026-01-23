@@ -1,0 +1,126 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<style>
+  body {
+    background: linear-gradient(135deg, #f0f8ff, #e3f2fd);
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+
+  /* Main content card */
+  .main-content {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  h2::before {
+    content: "📦";
+  }
+
+  /* Form labels */
+  .form-label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 6px;
+  }
+
+  /* Form inputs */
+  .form-control {
+    border: 2px solid #ced4da;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+  }
+
+  .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.2);
+  }
+
+  /* Save button */
+  .btn-success {
+    background: linear-gradient(135deg, #28a745, #1e7e34);
+    border: none;
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+  }
+
+  .btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(40, 167, 69, 0.3);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .container-fluid {
+      padding-left: 15px;
+      padding-right: 15px;
+      padding-top: 200px;
+    }
+
+    .main-content {
+      padding: 20px;
+    }
+
+    .form-control {
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+
+    .btn-success {
+      padding: 8px 20px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<div class="container-fluid" style="padding-top: 170px;">
+  <div class="row">
+    <%- include("partials/sidebar") %>
+
+    <div class="col-md-10 p-4 main-content">
+      <h2>Add New Product</h2>
+
+      <form method="POST" action="/admin/products" class="mt-3">
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input type="text" name="name" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Price</label>
+          <input type="number" name="price" class="form-control" step="0.01" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Category</label>
+          <input type="text" name="category" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Stock</label>
+          <input type="number" name="stock" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Product</button>
+      </form>
+    </div>
+  </div>
+</div>

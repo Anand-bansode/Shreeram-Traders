@@ -1,161 +1,356 @@
 <% layout("/layouts/boilerplate.ejs") %>
 
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }body {
-  background: linear-gradient(to right, #f9f9f9, #fefefe);
-  color: #333;
+  .about-page {
+    background: linear-gradient(135deg, #f0f4ff, #e3f2fd, #f8f5e9);
+    padding: 160px 0 100px;
+  }
 
-}
+  .about-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 60px 40px;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #e0f0ff;
+    animation: fadeInUp 0.8s ease-out;
+  }
 
-.container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 20px;
-}
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-.about-header {
-  text-align: center;
-  color: #b62d2d;
-  margin-bottom: 40px;
-}
+  .about-header {
+    text-align: center;
+    margin-bottom: 70px;
+    position: relative;
+  }
 
-.about-header h1 {
-  font-size: 2.8rem;
-}
+  .about-header::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+    margin: 15px auto;
+    border-radius: 2px;
+    animation: slideInUnderline 1.2s ease-in-out;
+  }
 
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 40px;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.image-section {
-  flex: 1;
-  min-width: 280px;
-}
-
-.image-section img {
-  width: 100%;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-.text-section {
-  flex: 1;
-  min-width: 280px;
-}
-
-.text-section h2 {
-  font-size: 2rem;
-  color: #b62d2d;
-  margin-bottom: 20px;
-}
-
-.text-section p,
-.text-section li {
-  font-size: 1.05rem;
-  line-height: 1.7;
-  margin-bottom: 12px;
-}
-
-.text-section ul {
-  padding-left: 20px;
-}
-
-blockquote {
-  background-color: #fff8f0;
-  border-left: 6px solid #b62d2d;
-  padding: 15px;
-  font-style: italic;
-  margin: 20px 0;
-}
-
-.cta {
-  text-align: center;
-  margin-top: 40px;
-}
-
-.cta a {
-  background-color: #b62d2d;
-  color: #fff;
-  padding: 12px 28px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: background 0.3s;
-}
-
-.cta a:hover {
-  background-color: #a02222;
-}
-
-@media (max-width: 768px) {
-  .row {
-    flex-direction: column;
+  @keyframes slideInUnderline {
+    from {
+      width: 0;
+    }
+    to {
+      width: 80px;
+    }
   }
 
   .about-header h1 {
-    font-size: 2rem;
+    font-size: 3rem;
+    color: #2c3e50;
+    font-weight: 800;
+    margin: 0 0 20px;
+    background: linear-gradient(90deg, #e63946, #f4a261, #2a9d8f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: colorShift 4s linear infinite;
   }
-}
 
-  </style>
+  @keyframes colorShift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
 
-<body>
-<div class="container" style="padding-top: 180px;">
-    <style>
-        @media (max-width: 750px) {
-            .container {
-                padding-top: 310px !important;
-            }
-        }
-    </style>
+  .about-header p {
+    font-size: 1.15rem;
+    color: #555;
+    max-width: 700px;
+    margin: 10px auto 0;
+    line-height: 1.7;
+  }
+
+  .about-row {
+    display: flex;
+    gap: 50px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 70px;
+    animation: fadeInUp 0.9s ease-out;
+  }
+
+  .image-section {
+    flex: 1;
+    min-width: 300px;
+    transform: perspective(1000px) rotateY(5deg);
+    transition: transform 0.4s ease;
+  }
+
+  .image-section img {
+    width: 100%;
+    border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .image-section:hover img {
+    transform: translateY(-8px) rotateY(2deg);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.3);
+  }
+
+  .text-section {
+    flex: 1;
+    min-width: 300px;
+  }
+
+  .text-section h2 {
+    font-size: 1.9rem;
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 14px;
+    position: relative;
+    display: inline-block;
+  }
+
+  .text-section h2::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+    border-radius: 2px;
+    margin-top: 8px;
+  }
+
+  .text-section p {
+    color: #444;
+    line-height: 1.8;
+    margin-bottom: 18px;
+    font-size: 1.05rem;
+  }
+
+  .text-section ul {
+    padding-left: 25px;
+    margin: 15px 0;
+  }
+
+  .text-section ul li {
+    margin-bottom: 12px;
+    color: #333;
+    position: relative;
+    padding-left: 10px;
+  }
+
+  .text-section ul li::before {
+    content: '✓';
+    color: #27ae60;
+    font-weight: bold;
+    position: absolute;
+    left: -20px;
+    top: 0;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 30px;
+    margin: 70px 0;
+  }
+
+  .info-card {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0f0ff;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    animation: cardSlide 0.8s ease-out;
+  }
+
+  .info-card:nth-child(1) { animation-delay: 0.1s; }
+  .info-card:nth-child(2) { animation-delay: 0.2s; }
+  .info-card:nth-child(3) { animation-delay: 0.3s; }
+  .info-card:nth-child(4) { animation-delay: 0.4s; }
+
+  @keyframes cardSlide {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .info-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  }
+
+  .info-card h3 {
+    font-size: 1.8rem;
+    color: #e63946;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .info-card p {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .cta {
+    text-align: center;
+    margin-top: 60px;
+  }
+
+  .cta a {
+    background: linear-gradient(135deg, #e63946, #f4a261);
+    color: #fff;
+    padding: 18px 40px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 10px 30px rgba(230, 57, 70, 0.3);
+    transition: all 0.3s ease;
+    border: 2px solid #c0392b;
+  }
+
+  .cta a:hover {
+    background: linear-gradient(135deg, #c0392b, #e67e22);
+    box-shadow: 0 15px 40px rgba(230, 57, 70, 0.5);
+    transform: translateY(-4px);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .about-page {
+      padding: 140px 0 80px;
+    }
+
+    .about-container {
+      padding: 40px 20px;
+    }
+
+    .about-header h1 {
+      font-size: 2.2rem;
+    }
+
+    .about-row,
+    .info-grid {
+      gap: 20px;
+    }
+
+    .about-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .text-section h2::after {
+      width: 70%;
+    }
+  }
+</style>
+
+<div class="about-page">
+  <div class="about-container">
+
+    <!-- HEADER -->
     <div class="about-header">
       <h1>About Shree Ram Trader</h1>
-      <p>Your Trusted Grocery Partner Since 2013</p>
-    </div><div class="row">
-  <div class="image-section">
-    <img src="/imgs/godown.jpeg" alt="Our Shop">
-  </div>
+      <p>
+        A trusted grocery supplier delivering quality products with
+        honesty and consistency since 2013.
+      </p>
+    </div>
 
-  <div class="text-section">
-    <h2>Who We Are</h2>
-    <p>
-      Shree Ram Trader is a family-run grocery store delivering fresh, quality, and affordable products to local communities since 2013. We specialize in grains, pulses, oil, and daily home essentials.
-    </p>
+    <!-- ROW -->
+    <div class="about-row">
+      <div class="image-section">
+        <img src="/imgs/godown.jpeg" alt="Shree Ram Trader Warehouse">
+      </div>
 
-    <h2>Our Mission</h2>
-    <p>
-      To deliver trustworthy, cost-effective groceries with a smile, while building long-term relationships with our customers.
-    </p>
+      <div class="text-section">
+        <h2>Who We Are</h2>
+        <p>
+          Shree Ram Trader is a family-run grocery business serving
+          households, retailers, and local businesses with reliable
+          grocery supplies at competitive prices.
+        </p>
 
-    <h2>Why Choose Us?</h2>
-    <ul>
-      <li>10+ Years of Customer Trust</li>
-      <li>Best Prices in Town</li>
-      <li>Quick Service & Home Delivery</li>
-      <li>Friendly, Family-Owned Business</li>
-    </ul>
+        <h2>What We Do</h2>
+        <p>
+          We supply grains, pulses, spices, edible oils, and daily
+          essentials sourced from trusted suppliers and delivered
+          with care.
+        </p>
 
-    <h2>Customer Reviews</h2>
-    <blockquote>
-      "Very friendly staff and great prices. Always a smooth shopping experience!"<br>
-      — <strong>Santosh J.</strong>
-    </blockquote>
+        <h2>How We Work</h2>
+        <ul>
+          <li>Carefully selected suppliers</li>
+          <li>Quality checks before dispatch</li>
+          <li>Proper storage for freshness</li>
+          <li>Timely delivery & transparent billing</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- INFO CARDS -->
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>10+</h3>
+        <p>Years of Trusted Service</p>
+      </div>
+      <div class="info-card">
+        <h3>500+</h3>
+        <p>Regular Customers</p>
+      </div>
+      <div class="info-card">
+        <h3>100%</h3>
+        <p>Quality Focused</p>
+      </div>
+      <div class="info-card">
+        <h3>Local</h3>
+        <p>Family-Owned Business</p>
+      </div>
+    </div>
+
+    <!-- VALUES -->
+    <div class="text-section">
+      <h2>Our Values</h2>
+      <p>
+        We believe in honesty, consistency, and long-term relationships.
+        Every customer matters to us, and we take pride in being a
+        dependable local business.
+      </p>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta">
+      <a href="/contact">📞 Contact Us Today</a>
+    </div>
+
   </div>
 </div>
-
-<div class="cta">
-  <a href="/contact">📞 Contact Us Now</a>
-</div>
-
-  </div>
-</body>

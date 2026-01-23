@@ -1,0 +1,283 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root {
+  --primary: #0d6efd;
+  --primary-light: #667eea;
+  --primary-dark: #0a58ca;
+  --success: #198754;
+  --success-light: #11998e;
+  --danger: #dc3545;
+  --dark: #212529;
+  --light: #f8f9fa;
+  --gray: #6c757d;
+}
+
+body {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+.main-content {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+/* Page Header */
+.page-header {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  border: 2px solid #e9ecef;
+}
+.page-header h2 {
+  color: var(--dark);
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Info Cards */
+.info-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  border: 2px solid #e9ecef;
+  margin-bottom: 24px;
+}
+.info-card p {
+  margin: 10px 0;
+  font-size: 14px;
+  color: var(--dark);
+}
+.info-card strong {
+  color: var(--dark);
+}
+
+/* Summary Card */
+.summary-card {
+  background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
+  color: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  margin-bottom: 24px;
+}
+.summary-card p {
+  margin: 10px 0;
+  font-size: 14px;
+}
+.summary-card strong {
+  color: white;
+  font-weight: 600;
+}
+
+/* Orders Table */
+.table-container {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  border: 1px solid #e9ecef;
+}
+.table {
+  margin: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.table thead th {
+  background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
+  color: white;
+  padding: 16px;
+  border: none;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+.table td {
+  padding: 16px;
+  border-bottom: 1px solid #e9ecef;
+  vertical-align: middle;
+  font-size: 14px;
+}
+.table tbody tr {
+  transition: all 0.3s ease;
+}
+.table tbody tr:hover {
+  background: #f8f9fa;
+  transform: scale(1.01);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+/* Status Badge */
+.status-badge {
+  padding: 5px 12px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+}
+.status-pending {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: white;
+}
+.status-delivered {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+.status-cancelled {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+/* Back Button */
+.btn-back {
+  background: linear-gradient(135deg, #6c757d, #495057);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.btn-back:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(108, 117, 125, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .info-card, .summary-card, .table-container {
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .table, thead, tbody, th, td, tr {
+    display: block;
+  }
+  thead {
+    display: none;
+  }
+  tr {
+    margin-bottom: 16px;
+    padding: 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+  }
+  td {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border: none;
+  }
+  td::before {
+    content: attr(data-label) ": ";
+    font-weight: 600;
+    min-width: 100px;
+    color: var(--dark);
+  }
+}
+</style>
+
+<div class="container-fluid" style="padding-top: 170px;">
+  <div class="row">
+    <!-- SIDEBAR -->
+    <%- include("partials/sidebar") %>
+
+    <!-- MAIN CONTENT -->
+    <div class="col-md-10 p-4">
+      <div class="main-content animate__animated animate__fadeIn">
+
+        <!-- Page Header -->
+        <div class="page-header animate__animated animate__fadeInUp">
+          <h2>
+            <i class="fas fa-history me-2"></i>
+            Customer Order History
+          </h2>
+        </div>
+
+        <!-- Customer Info -->
+        <div class="info-card animate__animated animate__fadeInUp animate__delay-1s">
+          <p><strong><i class="fas fa-store me-1 text-primary"></i> Store Name:</strong> <%= customer.storeName %></p>
+          <p><strong><i class="fas fa-user me-1 text-primary"></i> Owner Name:</strong> <%= customer.ownerName %></p>
+          <p><strong><i class="fas fa-envelope me-1 text-primary"></i> Email:</strong> <%= customer.email %></p>
+          <p><strong><i class="fas fa-phone me-1 text-primary"></i> Phone:</strong> <%= customer.phone %></p>
+          <p><strong><i class="fas fa-calendar-alt me-1 text-primary"></i> Joined On:</strong> <%= customer.createdAt.toDateString() %></p>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary-card animate__animated animate__fadeInUp animate__delay-1-5s">
+          <p><strong><i class="fas fa-shopping-bag me-1"></i> Total Orders:</strong> <%= totalOrders %></p>
+          <p><strong><i class="fas fa-rupee-sign me-1"></i> Total Amount Spent:</strong> ₹ <%= totalAmount %></p>
+        </div>
+
+        <% if (orders.length > 0) { %>
+          <!-- Orders Table -->
+          <div class="table-container animate__animated animate__fadeIn animate__delay-2s">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Products</th>
+                  <th>Total Amount</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% orders.forEach((order, idx) => { %>
+                  <tr class="animate__animated animate__fadeInUp" style="animation-delay: <%= (idx * 0.1) + 0.6 %>s">
+                    <td data-label="Order ID">
+                      <strong><%= order._id %></strong>
+                    </td>
+                    <td data-label="Products" style="max-width: 200px; overflow-y: auto;">
+                      <% if (order.products && order.products.length > 0) { %>
+                        <% order.products.forEach(p => { %>
+                          <div class="mb-1"><%= p.name %> (<%= p.quantity %>)</div>
+                        <% }) %>
+                      <% } else { %>
+                        <span class="text-muted">No products</span>
+                      <% } %>
+                    </td>
+                    <td data-label="Total Amount">
+                      <strong>₹ <%= order.totalAmount %></strong>
+                    </td>
+                    <td data-label="Status">
+                      <span class="status-badge status-<%= order.status.toLowerCase() %>">
+                        <%= order.status %>
+                      </span>
+                    </td>
+                    <td data-label="Date"><%= order.createdAt.toDateString() %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <div class="text-center text-muted animate__animated animate__fadeIn animate__delay-2-5s">
+            <i class="fas fa-shopping-bag fa-2x mb-2"></i>
+            <p>No orders found for this customer.</p>
+          </div>
+        <% } %>
+
+        <!-- Back Button -->
+        <a href="/admin/customers" class="btn-back mt-3">
+          <i class="fas fa-arrow-left me-1"></i> Back to Customers
+        </a>
+
+      </div>
+    </div>
+  </div>
+</div>

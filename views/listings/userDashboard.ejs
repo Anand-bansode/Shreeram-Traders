@@ -1,0 +1,184 @@
+
+ <% layout("/layouts/boilerplate.ejs") %>
+
+
+<div class="welcome-box" style="  padding-top: 200px;">
+  <h2>👋 Welcome, <%= user.ownerName || "User" %></h2>
+  <p class="store-badge">🏪 <%= user.storeName || "My Store" %></p>
+</div>
+
+<style>
+ @media (max-width: 750px) {
+    .welcome-box {
+        padding-top: 280px !important;
+    }
+}
+  .welcome-box {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 30px;
+    animation: slideInDown 0.8s ease-out;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+  }
+
+  .welcome-box h2 {
+    color: white;
+    font-size: 32px;
+    margin: 0 0 15px 0;
+    animation: fadeInScale 1s ease-out;
+  }
+
+  .store-badge {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 25px;
+    display: inline-block;
+    font-size: 16px;
+    margin: 0;
+    animation: fadeInUp 1.2s ease-out;
+    backdrop-filter: blur(10px);
+  }
+
+  @keyframes slideInDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+
+<div class="dashboard">
+
+  <div class="card">
+    <h3>📦 My Orders</h3>
+    <p>View your orders & invoices</p>
+    <a class="orders" href="/my-orders">View Orders</a>
+  </div>
+
+  <div class="card">
+    <h3>👤 My Profile</h3>
+    <p>View your account details</p>
+    <a class="profile" href="/user/profile">Profile</a>
+  </div>
+
+  <div class="card">
+    <h3>🚪 Logout</h3>
+    <p>Securely logout</p>
+    <a class="logout" href="/logout">Logout</a>
+  </div>
+
+</div> 
+
+
+<style>
+/* Dashboard layout */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  margin-top: 40px;
+  animation: fadeUp 1s ease;
+}
+
+/* Card base */
+/* .card {
+  background: rgba(255,255,255,0.9);
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+  text-align: center;
+  transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
+} */
+.card {
+  background: rgb(225, 214, 214);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.4);
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+  transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* Card hover effect */
+.card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.2);
+}
+
+/* Decorative gradient line */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 5px;
+  width: 100%;
+  background: linear-gradient(to right, #3498db, #9b59b6);
+}
+
+/* Headings */
+.card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+/* Text */
+.card p {
+  color: #555;
+  font-size: 0.95rem;
+}
+
+/* Buttons */
+.card a {
+  text-decoration: none;
+  color: white;
+  padding: 10px 18px;
+  display: inline-block;
+  border-radius: 30px;
+  margin-top: 15px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+/* Button hover */
+.card a:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
+
+/* Button colors */
+.orders { background: linear-gradient(135deg,#3498db,#2980b9); }
+.profile { background: linear-gradient(135deg,#9b59b6,#8e44ad); }
+.logout { background: linear-gradient(135deg,#e74c3c,#c0392b); }
+
+/* Fade animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>

@@ -1,0 +1,446 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+<style>
+  :root {
+    --primary: #0d6efd;
+    --success: #198754;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --light: #f8f9fa;
+    --dark: #212529;
+  }
+
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    color: var(--dark);
+  }
+
+  .header-section {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    padding: 30px;
+    margin-bottom: 30px;
+  }
+
+  .header-section h2 {
+    color: var(--dark);
+    font-weight: 700;
+  }
+
+  /* Stat Cards – Colorful & animated */
+  .stat-card {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .card.text-bg-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  .card.text-bg-success {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  }
+
+  .card.text-bg-warning {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  }
+
+  .card.text-bg-danger {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  }
+
+  .stat-card .card-body {
+    padding: 24px;
+    color: white;
+  }
+
+  .stat-card h6 {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+  }
+
+  .stat-card h2 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-top: 12px;
+  }
+
+  .main-content {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  }
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 4px solid var(--primary);
+    display: inline-block;
+  }
+
+  .table-card {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    margin-top: 20px;
+  }
+
+  .table-card thead th {
+    background: linear-gradient(135deg, #0d6efd, #0a58ca);
+    color: white;
+    font-weight: 600;
+    padding: 16px 18px;
+    border: none;
+  }
+
+  .table-card td {
+    padding: 16px 18px;
+    border-top: 1px solid #e9ecef;
+  }
+
+  .table-card tbody tr {
+    transition: all 0.3s ease;
+  }
+
+  .table-card tbody tr:hover {
+    background: #f8f9fa;
+    transform: scale(1.01);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  }
+
+  .badge-status {
+    padding: 8px 16px;
+    border-radius: 24px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  .chart-card {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  }
+
+  .chart-card .card-body {
+    background: white;
+    height: 420px;
+  }
+
+  .chart-card h5 {
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 20px;
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate__fadeInUp {
+    animation-name: fadeInUp;
+  }
+
+  .card stat-card {
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  .stat-card:nth-child(1) { animation-delay: 0.2s; }
+  .stat-card:nth-child(2) { animation-delay: 0.3s; }
+  .stat-card:nth-child(3) { animation-delay: 0.4s; }
+  .stat-card:nth-child(4) { animation-delay: 0.5s; }
+</style>
+
+<div class="container-fluid" style="padding-top: 170px;">
+  <div class="row">
+    <%- include("partials/sidebar") %>
+
+    <div class="col-md-10 p-4">
+      <!-- Header -->
+      <div class="header-section animate__animated animate__fadeIn">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h2 class="animate__animated animate__fadeInUp animate__delay-1s">Admin Dashboard</h2>
+            <p class="text-muted mb-0 animate__animated animate__fadeInUp animate__delay-2s">
+              Welcome back! Here's what's happening with ShreeRam Traders.
+            </p>
+          </div>
+          <span class="fw-bold" style="font-size: 18px; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            ShreeRam Traders Admin
+          </span>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="row mt-4">
+        <div class="col-md-3">
+          <div class="card stat-card text-bg-primary animate__animated animate__fadeInUp animate__delay-1s">
+            <div class="card-body">
+              <h6>Total Orders</h6>
+              <h2 class="counter" data-target="<%= totalOrders ?? 0 %>">0</h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card stat-card text-bg-success animate__animated animate__fadeInUp animate__delay-1-5s">
+            <div class="card-body">
+              <h6>Total Customers</h6>
+              <h2 class="counter" data-target="<%= totalCustomers ?? 0 %>">0</h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card stat-card text-bg-warning animate__animated animate__fadeInUp animate__delay-2s">
+            <div class="card-body">
+              <h6>Total Products</h6>
+              <h2 class="counter" data-target="<%= totalProducts ?? 0 %>">0</h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card stat-card text-bg-danger animate__animated animate__fadeInUp animate__delay-2-5s">
+            <div class="card-body">
+              <h6>Total Revenue</h6>
+              <h2>₹ <%= totalRevenue ?? 0 %></h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content mt-4 animate__animated animate__fadeIn animate__delay-3s">
+        <!-- Recent Orders -->
+        <h4 class="section-title">Recent Orders</h4>
+        <div class="table-card animate__animated animate__fadeIn animate__delay-4s">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Total Amount</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% recentOrders.forEach((order, idx) => { %>
+                <tr class="animate__animated animate__fadeInUp" style="animation-delay: <%= (idx * 0.1) + 0.5 %>s">
+  <td> <strong><%= order._id %></strong></td>
+                  <td><%= order.user?.ownerName || "N/A" %></td>
+                  <td><strong>₹ <%= order.totalAmount || 0 %></strong></td>
+                  <td>
+                    <% if (order.status === 'Delivered') { %>
+                      <span class="badge-status" style="background: #d1e7dd; color: #0f5132;">Delivered</span>
+                    <% } else if (order.status === 'Pending') { %>
+                      <span class="badge-status" style="background: #fff3cd; color: #664d03;">Pending</span>
+                    <% } else { %>
+                      <span class="badge-status" style="background: #f8d7da; color: #842029;">Cancelled</span>
+                    <% } %>
+                  </td>
+                  <td><%= order.createdAt.toDateString() %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Low Stock Products -->
+        <h4 class="section-title">Low Stock Products</h4>
+        <div class="table-card animate__animated animate__fadeIn animate__delay-4s">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Stock</th>
+                <th>Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% lowStockProducts.forEach((product, idx) => { %>
+                <tr class="animate__animated animate__fadeInUp" style="animation-delay: <%= (idx * 0.1) + 0.6 %>s">
+                  <td><strong><%= product.name %></strong></td>
+                  <td><span class="badge bg-danger bg-opacity-75"><%= product.stock %></span></td>
+                  <td><%= product.category %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="row mt-5">
+        <div class="col-md-6 animate__animated animate__fadeInLeft animate__delay-5s">
+          <div class="chart-card">
+            <div class="card-body">
+              <h5 class="text-center">Order Status Distribution</h5>
+              <canvas id="orderChart"></canvas>
+            </div>
+          </div>
+        </div>
+      
+        <div class="col-md-6 animate__animated animate__fadeInRight animate__delay-5s">
+  <div class="chart-card" style="height: 420px;">
+    <div class="card-body" style="height: 100%; padding: 20px;">
+      <h5 class="text-center">Monthly Orders Trend</h5>
+      <canvas id="monthlyChart" style="height: 360px !important; width: 100% !important;"></canvas>
+    </div>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Animate counters
+  document.querySelectorAll('.counter').forEach(el => {
+    const target = parseInt(el.dataset.target) || 0;
+    const initial = parseInt(el.textContent) || 0;
+    const duration = 1500;
+    const stepTime = 20;
+    const totalSteps = Math.ceil(duration / stepTime);
+    let currentStep = 0;
+    const stepValue = (target - initial) / totalSteps;
+
+    const timer = setInterval(() => {
+      currentStep++;
+      let value = initial + stepValue * currentStep;
+      if (currentStep >= totalSteps) {
+        value = target;
+        clearInterval(timer);
+      }
+      el.textContent = Math.round(value);
+    }, stepTime);
+  });
+
+  // PIE CHART (Order Status)
+  const pending = <%= pendingOrders || 0 %>;
+  const delivered = <%= deliveredOrders || 0 %>;
+  const cancelled = <%= cancelledOrders || 0 %>;
+
+  const orderCtx = document.getElementById('orderChart').getContext('2d');
+  new Chart(orderCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Pending', 'Delivered', 'Cancelled'],
+      datasets: [{
+        data: [pending, delivered, cancelled],
+        backgroundColor: ['#ffc107', '#198754', '#dc3545'],
+        borderColor: ['#fff', '#fff', '#fff'],
+        borderWidth: 2,
+        borderRadius: 10
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            font: { size: 12, weight: 600 },
+            padding: 12
+          }
+        }
+      }
+    }
+  });
+
+  // BAR CHART (Monthly Orders)
+ // **FIXED BAR CHART** - Monthly Orders (ALL months visible)
+const monthCtx = document.getElementById('monthlyChart').getContext('2d');
+new Chart(monthCtx, {
+  type: 'bar',
+  data: {
+    labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+    datasets: [{
+      label: 'Orders',
+      data: <%- JSON.stringify(monthlyCounts || Array(12).fill(0)) %>,
+      backgroundColor: 'rgba(13, 110, 253, 0.8)',
+      borderColor: '#0d6efd',
+      borderWidth: 2,
+      borderRadius: 5
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    layout: {
+      padding: { bottom: 20 }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: {
+          autoSkip: false,        // ← SHOWS ALL LABELS
+          maxRotation: 45,        // ← SLIGHT ROTATION IF NEEDED
+          minRotation: 0,
+          font: { size: 10, family: 'Arial' }
+        }
+      },
+      y: {
+        beginAtZero: true,
+        grid: { color: 'rgba(0,0,0,0.1)' },
+        ticks: { font: { size: 11 } }
+      }
+    },
+    plugins: {
+      legend: { display: false }  // ← Removes legend to save space
+    }
+  }
+});
+
+
+  // Animate table rows on load
+  setTimeout(() => {
+    document.querySelectorAll('.table-card tbody tr').forEach((row, i) => {
+      row.style.opacity = '0';
+      row.style.transform = 'translateY(30px)';
+      setTimeout(() => {
+        row.style.transition = 'all 0.6s ease';
+        row.style.opacity = '1';
+        row.style.transform = 'translateY(0)';
+      }, (i * 100) + 500);
+    });
+  }, 500);
+  
+</script>

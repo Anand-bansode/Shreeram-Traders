@@ -1,0 +1,114 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<style>
+  .error-wrapper {
+    min-height: calc(100vh - 120px); /* header/footer adjust */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 15px;
+    padding-top: 200px;
+    background: linear-gradient(135deg, #ff6a6a, #ffb347);
+  }
+
+  .error-box {
+    background: #fff;
+    max-width: 480px;
+    width: 100%;
+    padding: 40px 30px;
+    
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    animation: slideUp 0.8s ease;
+  }
+
+  .error-icon {
+    font-size: 70px;
+    margin-bottom: 15px;
+    animation: shake 0.6s ease-in-out;
+  }
+
+  .error-box h1 {
+    color: #e53935;
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+
+  .error-box p {
+    color: #555;
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+
+  .error-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 12px 26px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s ease;
+  }
+
+  .btn-danger {
+    background: linear-gradient(135deg, #e53935, #ff5252);
+    color: white;
+  }
+
+  .btn-danger:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(229,57,53,0.4);
+  }
+
+  .btn-secondary {
+    background: #ececec;
+    color: #333;
+  }
+
+  .btn-secondary:hover {
+    background: #ddd;
+    transform: translateY(-3px);
+  }
+
+  /* Animations */
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+  }
+</style>
+
+<div class="error-wrapper">
+  <div class="error-box">
+    <div class="error-icon">❌</div>
+    <h1>Login Failed</h1>
+    <p>
+      Invalid username or password.<br>
+      Please check your credentials and try again.
+    </p>
+
+    <div class="error-actions">
+      <a href="/login" class="btn btn-danger">🔁 Try Again</a>
+      <a href="/" class="btn btn-secondary">🏠 Home</a>
+    </div>
+  </div>
+</div>
+

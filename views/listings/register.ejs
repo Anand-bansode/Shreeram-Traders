@@ -1,56 +1,255 @@
-<% layout("/layouts/boilerplate.ejs") %>
+ <% layout("/layouts/boilerplate.ejs") %>
+
 <style>
-    .register-form-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 60vh;
-        padding-top: 200px;
-    }
-    .register-form {
-        background: #fff;
-        padding: 32px 24px;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        max-width: 350px;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-    }
-    .register-form input {
-        padding: 10px;
-        font-size: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-    .register-form button {
-        padding: 10px;
-        font-size: 1rem;
-        background: #1976d2;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-    @media (max-width: 500px) {
-        .register-form {
-             padding-top: 120px !important;
-            max-width: 100%;
-        }
-    }
+   
+     
+/* ===== Page Background ===== */
+body {
+    background: linear-gradient(120deg, #f8f9fa, #fff1f2);
+}
+
+/* ===== Container ===== */
+.register-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+   
+    position: relative;
+    overflow: hidden;
+}
+
+/* decorative shape */
+.register-form-container::after {
+    content: "";
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    top: 10px;
+    right: -160px;
     
-  @media (max-width: 750px) {
-            .register-form-container{
-                padding-top: 120px !important;
-            }
-        }
+
+    /* initial state */
+    transform: scale(0);
+    
+    /* animated gradient */
+    background: linear-gradient(45deg, purple, orangered);
+
+    animation: circleGrow 2.4s ease-out forwards;
+}
+
+
+/* ===== Form Card ===== */
+.register-form {
+    background: #fff;
+    padding: 32px 26px;
+    border-radius: 14px;
+    max-width: 460px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+
+    /* animation */
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideFade 0.9s ease forwards;
+}
+
+@keyframes slideFade {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== Heading ===== */
+.register-form h3 {
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* ===== Inputs ===== */
+.register-form input {
+    padding: 12px;
+    font-size: 1rem;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.register-form input:focus {
+    outline: none;
+    border-color: orangered;
+    box-shadow: 0 0 10px rgba(255,69,0,0.35);
+    transform: scale(1.02);
+}
+
+/* ===== Button ===== */
+.register-btn {
+    position: relative;
+    overflow: hidden;
+    background: #f5f7f8;
+    color: #fff;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+/* gradient layer */
+.register-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, purple, orangered);
+    transform: scaleX(1);
+    transform-origin: left;
+    transition: transform 0.5s ease;
+    z-index: -1;
+}
+
+/* hover effect */
+.register-btn:hover::before {
+    transform: scaleX(0);
+}
+
+.register-btn:hover {
+    color: orangered;
+    border: 1px solid orangered;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255,69,0,0.4);
+}
+
+/* click effect */
+.register-btn:active {
+    transform: scale(0.96);
+}
+
+/* ===== Login Link ===== */
+.register-form span {
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.register-form a {
+    color: orangered;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.register-form a:hover {
+    transform: translateX(5px);
+    text-decoration: underline;
+}
+
+/* ===== Error Animation (future use) ===== */
+.shake {
+    animation: shake 0.4s;
+}
+@keyframes circleGrow {
+    0% {
+        transform: scale(0);
+        background: linear-gradient(45deg, #8c04ee, #ff4500);
+    }
+
+    50% {
+        transform: scale(1.1);
+        background: linear-gradient(45deg, #ff4500, #ffb703);
+    }
+
+    100% {
+        transform: scale(1);
+        background: linear-gradient(45deg, orangered, rgb(255, 21, 0));
+    }
+}
+
+
+@keyframes shake {
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 750px) {
+    .register-form-container {
+        padding-top: 120px !important;
+    }
+}
+
+@media (max-width: 500px) {
+    .register-form {
+        max-width: 100%;
+    }
+}
+/* for circle animation */
+.register-form-container::before {
+    content: "";
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+
+    /* left bottom position */
+    bottom: -100px;
+    left: -120px;
+
+    transform: scale(0);
+    background: linear-gradient(45deg, #00b4d8, #48cae4);
+
+    animation: circleGrowLeft 1.6s ease-out forwards;
+}
+@keyframes circleGrowLeft {
+     0% {
+        transform: scale(0);
+        background: linear-gradient(45deg, #8c04ee, #ff4500);
+    }
+
+    50% {
+        transform: scale(1.1);
+        background: linear-gradient(45deg, #ff4500, #ffb703);
+    }
+
+    100% {
+        transform: scale(1);
+        background: linear-gradient(45deg, rgb(218, 80, 16), rgb(138, 11, 136));
+    }
+}
+
+
+
 </style>
+
+
+
 <div class="register-form-container">
-    <form class="register-form" method="POST" action="/register">
-        <h3>Register Now</h3>
-        <input type="text" name="username" placeholder="Create Username" required>
-        <input type="password" name="password" placeholder="Create Password" required>
-        <button type="submit">Register</button>
-    </form>
-</div>
+
+<form method="POST" action="/register" class="register-form"  style=" padding-top: 200px;" autocomplete="off">
+  <h3>User Registration</h3>
+
+  <input type="text" name="storeName" placeholder="Store Name" required>
+
+  <input type="text" name="ownerName" placeholder="Owner Name" required>
+
+  <input type="email" name="email" placeholder="Email" required autocomplete="new-email">
+
+  <input type="text" name="phone" placeholder="Phone" required>
+
+  <input type="password" name="password" placeholder="Password" required autocomplete="new-password">
+
+  <button type="submit" class="register-btn">Register</button>
+
+  <p>Already registered? <a href="/login">Login</a></p>
+</form>
+
+

@@ -1,0 +1,267 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root {
+  --primary: #0d6efd;
+  --primary-light: #667eea;
+  --primary-dark: #0a58ca;
+  --info: #0dcaf0;
+  --info-light: #0dcaf0;
+  --info-dark: #0a58ca;
+  --danger: #dc3545;
+  --dark: #212529;
+  --light: #f8f9fa;
+  --gray: #6c757d;
+}
+
+body {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+.main-content {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+/* Header */
+.header-actions {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  border: 2px solid #e9ecef;
+}
+
+h2 {
+  color: var(--dark);
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Search Form */
+.search-form {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  margin-bottom: 24px;
+}
+.search-form .form-control {
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 14px;
+}
+.search-form .form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+}
+.search-form .btn {
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-weight: 600;
+}
+.search-form .btn-primary {
+  background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
+  color: white;
+  border: none;
+}
+.search-form .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(102, 126, 234, 0.3);
+}
+
+/* Customers Table */
+.table-container {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  border: 1px solid #e9ecef;
+}
+.table {
+  margin: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.table thead th {
+  background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
+  color: white;
+  padding: 16px;
+  border: none;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+.table td {
+  padding: 16px;
+  border-bottom: 1px solid #e9ecef;
+  vertical-align: middle;
+  font-size: 14px;
+}
+.table tbody tr {
+  transition: all 0.3s ease;
+}
+.table tbody tr:hover {
+  background: #f8f9fa;
+  transform: scale(1.01);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+/* Buttons */
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  border: none;
+}
+.btn-info {
+  background: linear-gradient(135deg, var(--info-light), var(--info-dark));
+  color: white;
+}
+.btn-info:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(13, 202, 240, 0.3);
+}
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+.btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(239, 68, 68, 0.3);
+}
+
+/* No Data */
+.no-data {
+  font-style: italic;
+  color: var(--gray);
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header-actions {
+    padding: 16px;
+  }
+  .search-form {
+    padding: 16px;
+  }
+  .table, thead, tbody, th, td, tr {
+    display: block;
+  }
+  thead {
+    display: none;
+  }
+  tr {
+    margin-bottom: 16px;
+    padding: 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+  }
+  td {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border: none;
+  }
+  td::before {
+    content: attr(data-label) ": ";
+    font-weight: 600;
+    min-width: 100px;
+    color: var(--dark);
+  }
+}
+</style>
+
+<div class="container-fluid" style="padding-top: 170px;">
+  <div class="row">
+    <!-- SIDEBAR -->
+    <%- include("partials/sidebar") %>
+
+    <!-- MAIN CONTENT -->
+    <div class="col-md-10 p-4">
+      <div class="main-content animate__animated animate__fadeIn">
+
+        <!-- Header -->
+        <div class="header-actions animate__animated animate__fadeInUp">
+          <h2>
+            <i class="fas fa-users me-2"></i>
+            All Registered Users
+          </h2>
+        </div>
+
+        <!-- Search Form -->
+        <div class="search-form animate__animated animate__fadeInUp animate__delay-1s">
+          <form method="GET" action="/admin/customers" class="d-flex">
+            <input
+              type="text"
+              name="search"
+              class="form-control me-2"
+              placeholder="Search by store, owner, email, phone"
+              value="<%= search || '' %>"
+            />
+            <button class="btn btn-primary">Search</button>
+          </form>
+        </div>
+
+        <!-- Customers Table -->
+        <div class="table-container animate__animated animate__fadeIn animate__delay-2s">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Store Name</th>
+                <th>Owner Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Joined On</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (customers.length > 0) { %>
+                <% customers.forEach((c, idx) => { %>
+                  <tr class="animate__animated animate__fadeInUp" style="animation-delay: <%= (idx * 0.1) + 0.6 %>s">
+                    <td data-label="Store Name"><strong><%= c.storeName %></strong></td>
+                    <td data-label="Owner Name"><%= c.ownerName %></td>
+                    <td data-label="Email"><%= c.email %></td>
+                    <td data-label="Phone"><%= c.phone %></td>
+                    <td data-label="Joined On"><%= c.createdAt.toDateString() %></td>
+                    <td data-label="Actions" style="white-space: nowrap;">
+                      <a href="/admin/customers/<%= c._id %>/history" class="btn btn-info btn-sm me-2">
+                        <i class="fas fa-history me-1"></i> View History
+                      </a>
+                      <form method="POST" action="/admin/customers/<%= c._id %>/delete" style="display:inline;" onsubmit="return confirm('Delete this user?')">
+                        <button type="submit" class="btn btn-danger btn-sm">
+                          <i class="fas fa-trash me-1"></i> Delete
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="6" class="text-center no-data">
+                    <i class="fas fa-user-slash me-2"></i> No registered users found
+                  </td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
