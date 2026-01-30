@@ -1,31 +1,109 @@
 <% layout("/layouts/boilerplate.ejs") %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
 <style>
     .contact-success {
         max-width: 500px;
         margin: 60px auto;
-        padding: 32px;
+        padding: 40px 32px;
         padding-top: 180px;
-        background: #f8f9fa;
-        border-radius: 12px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.12);
         text-align: center;
         font-family: 'Segoe UI', Arial, sans-serif;
+        position: relative;
+        overflow: hidden;
     }
+    
+    .contact-success::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: linear-gradient(90deg, #d32f2f, #ff6b35, #d32f2f);
+    }
+    
+    .success-icon {
+        font-size: 4rem;
+        color: #2d7c2d;
+        margin-bottom: 20px;
+        animation: animate__bounceIn 1s ease;
+    }
+    
     .contact-success h2 {
         color: #2d7c2d;
-        margin-bottom: 18px;
+        font-weight: 700;
+        font-size: 2.2rem;
+        margin-bottom: 16px;
+        background: linear-gradient(135deg, #2d7c2d, #4caf50);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
+    
     .contact-success p {
-        color: #333;
-        font-size: 1.1em;
+        color: #555;
+        font-size: 1.15em;
+        line-height: 1.6;
+        margin-bottom: 24px;
     }
-  @media (max-width: 750px) {
-            .contact-success {
-                padding-top: 120px !important;
-            }
+    
+    .trader-name {
+        font-weight: 600;
+        color: #d32f2f;
+    }
+    
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #d32f2f;
+        color: white;
+        padding: 12px 28px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+    }
+    
+    .back-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4);
+        color: white;
+    }
+    
+    @media (max-width: 768px) {
+        .contact-success {
+            margin: 20px;
+            padding: 30px 24px;
+            padding-top: 140px;
         }
+        
+        .contact-success h2 {
+            font-size: 1.8rem;
+        }
+        
+        .success-icon {
+            font-size: 3.2rem;
+        }
+    }
 </style>
-<div class="contact-success">
+
+<div class="contact-success animate__animated animate__fadeInUp">
+    <div class="success-icon">
+        <i class="fas fa-check-circle"></i>
+    </div>
+    
     <h2>Thank you, <%= name %>!</h2>
-    <p>Your message has been sent successfully. We'll get back to you soon.</p>
+    <p>Your message has been sent successfully to <strong class="trader-name">ShreeRam Traders</strong>. We'll get back to you within 24 hours.</p>
+    
+    <a href="/" class="back-btn animate__animated animate__pulse animate__infinite">
+        <i class="fas fa-home"></i>
+        Back to Home
+    </a>
 </div>

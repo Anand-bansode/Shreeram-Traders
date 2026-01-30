@@ -45,6 +45,11 @@ app.use(
   })
 );
 //updated  islogedIn
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
 
 function isLoggedIn(req, res, next) {
   if (!req.session.user) {
@@ -110,6 +115,8 @@ app.get("/admin-login", (req, res) => {
 });
 
 
+
+
 app.get("/user/profile", isLoggedIn, async (req, res) => {
   try {
     const user = await User.findById(req.session.userId);
@@ -131,22 +138,39 @@ app.get("/user/profile", isLoggedIn, async (req, res) => {
 
 // 
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+
 
 // POST route
 app.post("/enquiry", async (req, res) => {
   const { name, email, phone, product, message } = req.body;
+
   try {
-    await sendMail({ name, email, phone, product, message });
+    // 🔹 FIRST response (UX important)
     res.render("contact-success", { name });
+
+    // 🔹 Background email (non-blocking)
+    sendMail({ name, email, phone, product, message })
+      .then(() => console.log("Enquiry email sent"))
+      .catch(err => console.error("Enquiry email error:", err));
+
   } catch (err) {
     console.error(err);
-    res.render("contact-fail", { error: "Email not sent. Please try again." });
+    res.render("contact-fail", {
+      error: "Something went wrong. Please try again."
+    });
   }
 });
+
+// app.post("/enquiry", async (req, res) => {
+//   const { name, email, phone, product, message } = req.body;
+//   try {
+//     await sendMail({ name, email, phone, product, message });
+//     res.render("contact-success", { name });
+//   } catch (err) {
+//     console.error(err);
+//     res.render("contact-fail", { error: "Email not sent. Please try again." });
+//   }
+// });
 //
 //contact us
 const nodemailer = require("nodemailer");
@@ -201,18 +225,39 @@ module.exports = async function sendMail({ name, email, phone, message }) {
   return true;
 };
 
+// app.post("/contact", async (req, res) => {
+//   try {
+//     const { name, email, phone, message } = req.body;
+
+//     await sendMail({ name, email, phone, message });
+
+//     res.render("contact-success", { name });
+//   } catch (err) {
+//     console.error(err);
+//     res.render("contact-fail", { error: "Email not sent. Please try again." });
+//   }
+// });
+
 app.post("/contact", async (req, res) => {
+  const { name, email, phone, message } = req.body;
+
   try {
-    const { name, email, phone, message } = req.body;
-
-    await sendMail({ name, email, phone, message });
-
+    // 🔹 Response FIRST (important)
     res.render("contact-success", { name });
+
+    // 🔹 Email background मध्ये
+    sendMail({ name, email, phone, message })
+      .then(() => console.log("Contact email sent"))
+      .catch(err => console.error("Email error:", err));
+
   } catch (err) {
     console.error(err);
-    res.render("contact-fail", { error: "Email not sent. Please try again." });
+    res.render("contact-fail", {
+      error: "Something went wrong. Please try again."
+    });
   }
 });
+
 
 app.post("/save-order", async (req, res) => {
   try {
@@ -318,8 +363,8 @@ function isAdmin(req, res, next) {
 app.post("/admin-login", (req, res) => {
   const { username, password } = req.body;
 
-  const ADMIN_USER = "admin123";
-  const ADMIN_PASS = "admin@123";
+  const ADMIN_USER = "srmt2026";
+  const ADMIN_PASS = "srmt@2026";
 
   if (username === ADMIN_USER && password === ADMIN_PASS) {
     req.session.isAdmin = true;
@@ -749,126 +794,22 @@ app.get("/track/:id", async (req, res) => {
   const order = await Order.findById(req.params.id);
   res.render("track", { order });
 });
-
 app.get("/admin/orders/:id/invoice", async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (!order) return res.send("Order not found");
-    // After PDF generation logic
+
     order.invoiceGenerated = true;
     await order.save();
 
-    // Create invoices folder if not exists
-    const invoiceFolder = path.join(__dirname, "invoices");
-    if (!fs.existsSync(invoiceFolder)) fs.mkdirSync(invoiceFolder);
-
-    const pdfPath = path.join(invoiceFolder, `invoice-${order._id}.pdf`);
-
-    // Create PDF
     const doc = new PDFDocument({ margin: 40 });
-    const stream = fs.createWriteStream(pdfPath);
-    doc.pipe(stream);
-    doc.pipe(res);
 
-    // ------------- HEADER -------------
-    doc.fontSize(22).text("SHREE RAM TRADERS", { align: "center" });
-    doc
-      .fontSize(12)
-      .text("NH_166 Andhalgaon, Tal Mangalvedha, Solapur", { align: "center" });
-    doc.fontSize(12).text("Phone: +91 9876543210", { align: "center" });
-    doc
-      .fontSize(12)
-      .text("Email: srmtraderinfo@gmail.com", { align: "center" });
-    doc.moveDown(1);
-    doc.fontSize(18).text("TAX INVOICE", { align: "center" });
-    doc.moveDown(1);
+    let buffers = [];
+    doc.on("data", buffers.push.bind(buffers));
+    doc.on("end", async () => {
+      const pdfBuffer = Buffer.concat(buffers);
 
-    // ------------- CUSTOMER DETAILS -------------
-    doc.fontSize(12).text(`Invoice ID: INV-${order._id}`);
-    doc.text(`Date: ${order.createdAt.toDateString()}`);
-    doc.text(`Customer: ${order.name}`);
-    doc.text(`Phone: ${order.phone}`);
-    doc.text(`Email: ${order.email}`);
-    doc.text(`Address: ${order.address}`);
-    doc.moveDown(1);
-
-    // ------------- PRODUCT TABLE -------------
-    const tableTop = doc.y;
-    const itemX = 40;
-    const descX = 100;
-    const qtyX = 300;
-    const priceX = 360;
-    const totalX = 450;
-
-    // Table Header
-    doc
-      .rect(itemX - 2, tableTop - 2, 510, 20)
-      .fill("#D3D3D3")
-      .stroke();
-    doc.fillColor("black").font("Helvetica-Bold");
-    doc.text("S.N", itemX, tableTop);
-    doc.text("Product", descX, tableTop);
-    doc.text("Qty", qtyX, tableTop);
-    doc.text("Price", priceX, tableTop);
-    doc.text("Total", totalX, tableTop);
-
-    let y = tableTop + 25;
-    doc.font("Helvetica").fillColor("black");
-
-    // Rows with alternating colors
-    order.products.forEach((p, i) => {
-      if (i % 2 === 0) {
-        doc
-          .rect(itemX - 2, y - 2, 510, 20)
-          .fill("#F2F2F2")
-          .stroke();
-        doc.fillColor("black");
-      }
-      const price = p.price || 0;
-      const qty = parseFloat(p.quantity) || 1;
-      const lineTotal = price * qty;
-
-      doc.text(i + 1, itemX, y);
-      doc.text(p.name, descX, y);
-      doc.text(p.quantity, qtyX, y);
-      doc.text("" + price.toFixed(2), priceX, y);
-      doc.text("" + lineTotal.toFixed(2), totalX, y);
-
-      y += 25;
-    });
-
-    // ------------- SPACE BEFORE TOTALS -------------
-    y += 10;
-
-    // ------------- TOTALS -------------
-    doc.moveTo(300, y).lineTo(550, y).stroke();
-    y += 10;
-    doc.font("Helvetica-Bold");
-    doc.text(`Subtotal: ${order.subTotal.toFixed(2)}`, 360, y);
-    y += 20;
-    doc.text(`GST: ${order.gst.toFixed(2)}`, 360, y);
-    y += 20;
-    doc.text(`Delivery Charges: ${order.deliveryCharges.toFixed(2)}`, 360, y);
-    y += 20;
-    doc.text(`Discount: ${order.discount.toFixed(2)}`, 360, y);
-    y += 20;
-    doc
-      .fontSize(15)
-      .text(`Total Amount: ${order.totalAmount.toFixed(2)}`, 360, y, {
-        underline: true,
-      });
-
-    // ------------- FOOTER -------------
-    doc.moveDown(4);
-    doc
-      .fontSize(10)
-      .text("Thank you for shopping with us!", { align: "center" });
-    doc.text("This is a system-generated invoice.", { align: "center" });
-
-    doc.end();
-
-    // ------------- EMAIL SEND -------------
-    stream.on("finish", async () => {
+      // ---------- SEND EMAIL ----------
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -881,17 +822,263 @@ app.get("/admin/orders/:id/invoice", async (req, res) => {
         from: "Shree Ram Traders <srmtraderinfo@gmail.com>",
         to: order.email,
         subject: `Your Invoice INV-${order._id}`,
-        text: "Hello! This is your invoice.",
-        attachments: [{ filename: `invoice-${order._id}.pdf`, path: pdfPath }],
+        text: "Please find your invoice attached.",
+        attachments: [
+          {
+            filename: `invoice-${order._id}.pdf`,
+            content: pdfBuffer,
+            contentType: "application/pdf",
+          },
+        ],
       });
 
-      console.log("Invoice emailed successfully!");
+      console.log("✅ Invoice emailed successfully!");
     });
+
+    // ---------- ALSO SHOW PDF IN BROWSER ----------
+    res.setHeader("Content-Type", "application/pdf");
+    doc.pipe(res);
+
+    // ---------- HEADER ----------
+    doc.fontSize(22).text("SHREE RAM TRADERS", { align: "center" });
+    doc.fontSize(12).text(
+      "NH_166 Andhalgaon, Tal Mangalvedha, Solapur",
+      { align: "center" }
+    );
+    doc.fontSize(12).text("Phone: +91 7276045536", { align: "center" });
+    doc.fontSize(12).text("Email: srmtraderinfo@gmail.com", {
+      align: "center",
+    });
+
+    doc.moveDown();
+    doc.fontSize(18).text("TAX INVOICE", { align: "center" });
+    doc.moveDown();
+
+    // ---------- CUSTOMER ----------
+    doc.fontSize(12).text(`Invoice ID: INV-${order._id}`);
+    doc.text(`Date: ${order.createdAt.toDateString()}`);
+    doc.text(`Customer: ${order.name}`);
+    doc.text(`Phone: ${order.phone}`);
+    doc.text(`Email: ${order.email}`);
+    doc.text(`Address: ${order.address}`);
+    doc.moveDown();
+
+    // ---------- TABLE ----------
+    const tableTop = doc.y;
+    const itemX = 40, descX = 100, qtyX = 300, priceX = 360, totalX = 450;
+
+    doc.rect(itemX - 2, tableTop - 2, 510, 20).fill("#D3D3D3");
+    doc.fillColor("black").font("Helvetica-Bold");
+    doc.text("S.N", itemX, tableTop);
+    doc.text("Product", descX, tableTop);
+    doc.text("Qty", qtyX, tableTop);
+    doc.text("Price", priceX, tableTop);
+    doc.text("Total", totalX, tableTop);
+
+    let y = tableTop + 25;
+    doc.font("Helvetica");
+
+    order.products.forEach((p, i) => {
+      if (i % 2 === 0) {
+        doc.rect(itemX - 2, y - 2, 510, 20).fill("#F2F2F2");
+        doc.fillColor("black");
+      }
+
+      const price = p.price || 0;
+      const qty = parseFloat(p.quantity) || 1;
+      const total = price * qty;
+
+      doc.text(i + 1, itemX, y);
+      doc.text(p.name, descX, y);
+      doc.text(p.quantity, qtyX, y);
+      doc.text(price.toFixed(2), priceX, y);
+      doc.text(total.toFixed(2), totalX, y);
+
+      y += 25;
+    });
+
+    y += 10;
+    doc.moveTo(300, y).lineTo(550, y).stroke();
+    y += 10;
+
+    doc.font("Helvetica-Bold");
+    doc.text(`Subtotal: ${order.subTotal.toFixed(2)}`, 360, y);
+    y += 20;
+    doc.text(`GST: ${order.gst.toFixed(2)}`, 360, y);
+    y += 20;
+    doc.text(
+      `Delivery Charges: ${order.deliveryCharges.toFixed(2)}`,
+      360,
+      y
+    );
+    y += 20;
+    doc.text(`Discount: ${order.discount.toFixed(2)}`, 360, y);
+    y += 20;
+
+    doc.fontSize(15).text(
+      `Total Amount: ${order.totalAmount.toFixed(2)}`,
+      360,
+      y,
+      { underline: true }
+    );
+
+    doc.moveDown(3);
+    doc.fontSize(10).text("Thank you for shopping with us!", {
+      align: "center",
+    });
+    doc.text("This is a system-generated invoice.", {
+      align: "center",
+    });
+
+    doc.end();
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.send("Invoice generation failed");
   }
 });
+
+// app.get("/admin/orders/:id/invoice", async (req, res) => {
+//   try {
+//     const order = await Order.findById(req.params.id);
+//     if (!order) return res.send("Order not found");
+//     // After PDF generation logic
+//     order.invoiceGenerated = true;
+//     await order.save();
+
+//     // Create invoices folder if not exists
+//     const invoiceFolder = path.join(__dirname, "invoices");
+//     if (!fs.existsSync(invoiceFolder)) fs.mkdirSync(invoiceFolder);
+
+//     const pdfPath = path.join(invoiceFolder, `invoice-${order._id}.pdf`);
+
+//     // Create PDF
+//     const doc = new PDFDocument({ margin: 40 });
+//     const stream = fs.createWriteStream(pdfPath);
+//     doc.pipe(stream);
+//     doc.pipe(res);
+
+//     // ------------- HEADER -------------
+//     doc.fontSize(22).text("SHREE RAM TRADERS", { align: "center" });
+//     doc
+//       .fontSize(12)
+//       .text("NH_166 Andhalgaon, Tal Mangalvedha, Solapur", { align: "center" });
+//     doc.fontSize(12).text("Phone: +91 9876543210", { align: "center" });
+//     doc
+//       .fontSize(12)
+//       .text("Email: srmtraderinfo@gmail.com", { align: "center" });
+//     doc.moveDown(1);
+//     doc.fontSize(18).text("TAX INVOICE", { align: "center" });
+//     doc.moveDown(1);
+
+//     // ------------- CUSTOMER DETAILS -------------
+//     doc.fontSize(12).text(`Invoice ID: INV-${order._id}`);
+//     doc.text(`Date: ${order.createdAt.toDateString()}`);
+//     doc.text(`Customer: ${order.name}`);
+//     doc.text(`Phone: ${order.phone}`);
+//     doc.text(`Email: ${order.email}`);
+//     doc.text(`Address: ${order.address}`);
+//     doc.moveDown(1);
+
+//     // ------------- PRODUCT TABLE -------------
+//     const tableTop = doc.y;
+//     const itemX = 40;
+//     const descX = 100;
+//     const qtyX = 300;
+//     const priceX = 360;
+//     const totalX = 450;
+
+//     // Table Header
+//     doc
+//       .rect(itemX - 2, tableTop - 2, 510, 20)
+//       .fill("#D3D3D3")
+//       .stroke();
+//     doc.fillColor("black").font("Helvetica-Bold");
+//     doc.text("S.N", itemX, tableTop);
+//     doc.text("Product", descX, tableTop);
+//     doc.text("Qty", qtyX, tableTop);
+//     doc.text("Price", priceX, tableTop);
+//     doc.text("Total", totalX, tableTop);
+
+//     let y = tableTop + 25;
+//     doc.font("Helvetica").fillColor("black");
+
+//     // Rows with alternating colors
+//     order.products.forEach((p, i) => {
+//       if (i % 2 === 0) {
+//         doc
+//           .rect(itemX - 2, y - 2, 510, 20)
+//           .fill("#F2F2F2")
+//           .stroke();
+//         doc.fillColor("black");
+//       }
+//       const price = p.price || 0;
+//       const qty = parseFloat(p.quantity) || 1;
+//       const lineTotal = price * qty;
+
+//       doc.text(i + 1, itemX, y);
+//       doc.text(p.name, descX, y);
+//       doc.text(p.quantity, qtyX, y);
+//       doc.text("" + price.toFixed(2), priceX, y);
+//       doc.text("" + lineTotal.toFixed(2), totalX, y);
+
+//       y += 25;
+//     });
+
+//     // ------------- SPACE BEFORE TOTALS -------------
+//     y += 10;
+
+//     // ------------- TOTALS -------------
+//     doc.moveTo(300, y).lineTo(550, y).stroke();
+//     y += 10;
+//     doc.font("Helvetica-Bold");
+//     doc.text(`Subtotal: ${order.subTotal.toFixed(2)}`, 360, y);
+//     y += 20;
+//     doc.text(`GST: ${order.gst.toFixed(2)}`, 360, y);
+//     y += 20;
+//     doc.text(`Delivery Charges: ${order.deliveryCharges.toFixed(2)}`, 360, y);
+//     y += 20;
+//     doc.text(`Discount: ${order.discount.toFixed(2)}`, 360, y);
+//     y += 20;
+//     doc
+//       .fontSize(15)
+//       .text(`Total Amount: ${order.totalAmount.toFixed(2)}`, 360, y, {
+//         underline: true,
+//       });
+
+//     // ------------- FOOTER -------------
+//     doc.moveDown(4);
+//     doc
+//       .fontSize(10)
+//       .text("Thank you for shopping with us!", { align: "center" });
+//     doc.text("This is a system-generated invoice.", { align: "center" });
+
+//     doc.end();
+
+//     // ------------- EMAIL SEND -------------
+//     stream.on("finish", async () => {
+//       const transporter = nodemailer.createTransport({
+//         service: "gmail",
+//         auth: {
+//           user: process.env.EMAIL_USER,
+//           pass: process.env.EMAIL_PASS,
+//         },
+//       });
+
+//       await transporter.sendMail({
+//         from: "Shree Ram Traders <srmtraderinfo@gmail.com>",
+//         to: order.email,
+//         subject: `Your Invoice INV-${order._id}`,
+//         text: "Hello! This is your invoice.",
+//         attachments: [{ filename: `invoice-${order._id}.pdf`, path: pdfPath }],
+//       });
+
+//       console.log("Invoice emailed successfully!");
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     res.send("Invoice generation failed");
+//   }
+// });
 
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");

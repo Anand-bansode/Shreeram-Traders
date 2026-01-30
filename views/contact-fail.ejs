@@ -1,33 +1,133 @@
 <% layout("/layouts/boilerplate.ejs") %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
 <style>
     .contact-fail-container {
-        max-width: 400px;
+        max-width: 500px;
         margin: 60px auto;
-        padding: 32px;
-        padding-top: 190px;
-        background: #fff3f3;
+        padding: 40px 32px;
+        padding-top: 120px;
+        background: linear-gradient(135deg, #fff5f5 0%, #ffeaea 100%);
         border: 1px solid #ffcccc;
-        border-radius: 8px;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(211, 47, 47, 0.15);
         text-align: center;
-        box-shadow: 0 2px 8px rgba(255, 0, 0, 0.08);
+        font-family: 'Segoe UI', Arial, sans-serif;
+        position: relative;
+        overflow: hidden;
     }
+    
+    .contact-fail-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: linear-gradient(90deg, #d32f2f, #ff5722, #d32f2f);
+    }
+    
+    .fail-icon {
+        font-size: 4rem;
+        color: #d32f2f;
+        margin-bottom: 20px;
+        animation: animate__shakeX 0.8s ease;
+    }
+    
     .contact-fail-container h2 {
         color: #d32f2f;
+        font-weight: 700;
+        font-size: 2.2rem;
         margin-bottom: 16px;
     }
-    .contact-fail-container p {
-        color: #333;
-        font-size: 1.1em;
+    
+    .error-message {
+        color: #721c24;
+        font-size: 1.15em;
+        line-height: 1.6;
+        margin-bottom: 24px;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 16px 20px;
+        border-radius: 12px;
+        border-left: 4px solid #d32f2f;
     }
-      @media (max-width: 750px) {
-            .contact-fail-container {
-                padding-top: 210px !important;
-            }
+    
+    .retry-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #d32f2f;
+        color: white;
+        padding: 12px 28px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+        margin-right: 12px;
+    }
+    
+    .home-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #6c757d;
+        color: white;
+        padding: 12px 28px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+    }
+    
+    .retry-btn:hover, .home-btn:hover {
+        transform: translateY(-2px);
+        color: white;
+    }
+    
+    @media (max-width: 768px) {
+        .contact-fail-container {
+            margin: 20px;
+            padding: 30px 24px;
+            padding-top: 100px;
         }
+        
+        .contact-fail-container h2 {
+            font-size: 1.8rem;
+        }
+        
+        .fail-icon {
+            font-size: 3.2rem;
+        }
+        
+        .retry-btn, .home-btn {
+            display: block;
+            margin: 8px auto;
+        }
+    }
 </style>
 
-<div class="contact-fail-container">
-    <h2>Oops!</h2>
-    <p><%= error %></p>
+<div class="contact-fail-container animate__animated animate__fadeInUp">
+    <div class="fail-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    
+    <h2>Oops! Message Not Sent</h2>
+  <div class="error-message">
+    <%= typeof error !== 'undefined' ? error : "Something went wrong. Please try again." %>
+</div>
+
+    
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <a href="/contact" class="retry-btn">
+            <i class="fas fa-redo"></i>
+            Try Again
+        </a>
+        <a href="/" class="home-btn">
+            <i class="fas fa-home"></i>
+            Back to Home
+        </a>
+    </div>
 </div>
