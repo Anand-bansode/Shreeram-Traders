@@ -149,6 +149,54 @@
 // module.exports =
 //   mongoose.models.Order || mongoose.model("Order", orderSchema);
 // models/Order.js
+
+//working code with quantity as string to allow "10kg" or "5pcs"
+// const mongoose = require("mongoose");
+
+// const orderSchema = new mongoose.Schema({
+//   name: String,
+//   phone: String,
+//   email: { type: String, required: true },
+//   address: String,
+//   storeName: { type: String, required: true },
+
+//   products: [
+//     {
+//       name: String,
+//       quantity: String,   // ✅ CHANGED TO STRING to allow "10kg"
+//     },
+//   ],
+
+//   status: {
+//     type: String,
+//     enum: ["Pending", "Delivered", "Cancelled"],
+//     default: "Pending",
+//   },
+
+//   user: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: "User",
+//     required: true,
+//   },
+
+//   subTotal: { type: Number, default: 0 },
+//   gst: { type: Number, default: 0 },
+//   deliveryCharges: { type: Number, default: 0 },
+//   discount: { type: Number, default: 0 },
+//   totalAmount: { type: Number, default: 0 },
+
+//   invoiceGenerated: { type: Boolean, default: false },
+
+
+//   createdAt: { type: Date, default: Date.now },
+// });
+
+// module.exports =
+//   mongoose.models.Order || mongoose.model("Order", orderSchema);
+// //module.exports = mongoose.model("Order", orderSchema);
+
+//for update to add total ammont
+
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
@@ -159,11 +207,13 @@ const orderSchema = new mongoose.Schema({
   storeName: { type: String, required: true },
 
   products: [
-    {
-      name: String,
-      quantity: String,   // ✅ CHANGED TO STRING to allow "10kg"
-    },
-  ],
+  {
+    name: String,
+    quantity: String,
+    price: { type: Number, default: 0 },
+    rowTotal: { type: Number, default: 0 }
+  }
+],
 
   status: {
     type: String,
@@ -185,10 +235,8 @@ const orderSchema = new mongoose.Schema({
 
   invoiceGenerated: { type: Boolean, default: false },
 
-
   createdAt: { type: Date, default: Date.now },
 });
 
 module.exports =
   mongoose.models.Order || mongoose.model("Order", orderSchema);
-//module.exports = mongoose.model("Order", orderSchema);

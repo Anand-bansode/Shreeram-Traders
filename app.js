@@ -16,24 +16,24 @@ const fs = require("fs");
 
 // MongoDB connection
 
-// mongoose
-//   .connect("mongodb://localhost:27017/shreeram", {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   })
-//   .then(() => {
-//     console.log("Connected to MongoDB");
-//   })
-//   .catch((err) => {
-//     console.error("MongoDB connection error:", err);
-//   });
+mongoose
+  .connect("mongodb://localhost:27017/shreeram", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+  });
 //for .env file
 
   require("dotenv").config();
 
-mongoose.connect(process.env.MONGO_URL)
-  .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.log("MongoDB Error:", err));
+// mongoose.connect(process.env.MONGO_URL)
+//   .then(() => console.log("MongoDB Connected"))
+//   .catch(err => console.log("MongoDB Error:", err));
 
 
 
@@ -309,8 +309,27 @@ app.post("/save-order", async (req, res) => {
 
 app.post("/register", async (req, res) => {
   try {
+
     const { storeName, ownerName, email, phone, password } = req.body;
 
+    // validations
+    if (!storeName || storeName.length < 3) {
+      return res.send("Store name must be at least 3 characters");
+    }
+
+    if (!ownerName || ownerName.length < 3) {
+      return res.send("Owner name must be at least 3 characters");
+    }
+
+    if (!email || !email.includes("@")) {
+      return res.send("Please enter valid email");
+    }
+
+    if (!phone || phone.length !== 10) {
+      return res.send("Phone must be 10 digits");
+    }
+
+    // password hash
     const hashedPwd = await bcrypt.hash(password, 10);
 
     await User.create({
@@ -322,9 +341,11 @@ app.post("/register", async (req, res) => {
     });
 
     res.redirect("/login");
+
   } catch (err) {
     console.log(err);
-res.render("listings/registerfail.ejs");  }
+    res.render("listings/registerfail.ejs");
+  }
 });
 
 app.get("/user/dashboard", isLoggedIn, (req, res) => {
@@ -446,41 +467,130 @@ app.post("/admin/orders/:id/delete", isAdmin, async (req, res) => {
 });
 
 //Auto Gst Claculate
+// app.post("/admin/orders/:id/update-amounts", isAdmin, async (req, res) => {
+//   try {
+//     const id = req.params.id;
+
+//     let { subTotal, gst, deliveryCharges, discount } = req.body;
+
+//     // Convert to numbers
+//     subTotal = parseFloat(subTotal) || 0;
+//     gst = parseFloat(gst) || 0;
+//     deliveryCharges = parseFloat(deliveryCharges) || 0;
+//     discount = parseFloat(discount) || 0;
+
+//     // GST auto calculate
+//     const gstAmount = (subTotal * gst) / 100;
+
+//     // Total before discount
+//     const beforeDiscount = subTotal + gstAmount + deliveryCharges;
+
+//     // Final total
+//     const finalTotal = beforeDiscount - discount;
+
+//     await Order.findByIdAndUpdate(id, {
+//       subTotal,
+//       gst, // store %
+//       deliveryCharges,
+//       discount,
+//       totalAmount: finalTotal, // auto calculated
+//     });
+
+//     res.redirect(`/admin/orders/${id}`);
+//   } catch (err) {
+//     console.log("Auto Calculation Error:", err);
+//     res.status(500).send("Recalculate failed");
+//   }
+// });
+
+// //for saving total ammont
+// app.post("/admin/orders/:id/update-amounts", isAdmin, async (req, res) => {
+//   try {
+
+//     const id = req.params.id;
+
+//     let { subTotal, gst, deliveryCharges, discount, price, rowTotal } = req.body;
+
+//     subTotal = parseFloat(subTotal) || 0;
+//     gst = parseFloat(gst) || 0;
+//     deliveryCharges = parseFloat(deliveryCharges) || 0;
+//     discount = parseFloat(discount) || 0;
+
+//     const order = await Order.findById(id);
+
+//     // products update
+//     order.products.forEach((p, i) => {
+
+//       p.price = parseFloat(price[i]) || 0;
+//       p.rowTotal = parseFloat(rowTotal[i]) || 0;
+
+//     });
+
+//     // GST calculate
+//     const gstAmount = (subTotal * gst) / 100;
+
+//     const beforeDiscount = subTotal + gstAmount + deliveryCharges;
+
+//     const finalTotal = beforeDiscount - discount;
+
+//     order.subTotal = subTotal;
+//     order.gst = gst;
+//     order.deliveryCharges = deliveryCharges;
+//     order.discount = discount;
+//     order.totalAmount = finalTotal;
+
+//     await order.save();
+
+//     res.redirect(`/admin/orders/${id}`);
+
+//   } catch (err) {
+
+//     console.log("Auto Calculation Error:", err);
+//     res.status(500).send("Recalculate failed");
+
+//   }
+// });
+
 app.post("/admin/orders/:id/update-amounts", isAdmin, async (req, res) => {
-  try {
-    const id = req.params.id;
 
-    let { subTotal, gst, deliveryCharges, discount } = req.body;
+  const id = req.params.id
 
-    // Convert to numbers
-    subTotal = parseFloat(subTotal) || 0;
-    gst = parseFloat(gst) || 0;
-    deliveryCharges = parseFloat(deliveryCharges) || 0;
-    discount = parseFloat(discount) || 0;
+  let { price, rowTotal, gst, deliveryCharges, discount } = req.body
 
-    // GST auto calculate
-    const gstAmount = (subTotal * gst) / 100;
+  const order = await Order.findById(id)
 
-    // Total before discount
-    const beforeDiscount = subTotal + gstAmount + deliveryCharges;
+  if(order.products && order.products.length){
 
-    // Final total
-    const finalTotal = beforeDiscount - discount;
+    order.products.forEach((p,i)=>{
+      p.price = parseFloat(price[i]) || 0
+      p.rowTotal = parseFloat(rowTotal[i]) || 0
+    })
 
-    await Order.findByIdAndUpdate(id, {
-      subTotal,
-      gst, // store %
-      deliveryCharges,
-      discount,
-      totalAmount: finalTotal, // auto calculated
-    });
-
-    res.redirect(`/admin/orders/${id}`);
-  } catch (err) {
-    console.log("Auto Calculation Error:", err);
-    res.status(500).send("Recalculate failed");
   }
-});
+
+  let subTotal = 0
+
+  rowTotal.forEach(r=>{
+    subTotal += parseFloat(r) || 0
+  })
+
+  gst = parseFloat(gst) || 0
+  deliveryCharges = parseFloat(deliveryCharges) || 0
+  discount = parseFloat(discount) || 0
+
+  const gstAmount = (subTotal * gst) / 100
+  const finalTotal = subTotal + gstAmount + deliveryCharges - discount
+
+  order.subTotal = subTotal
+  order.gst = gst
+  order.deliveryCharges = deliveryCharges
+  order.discount = discount
+  order.totalAmount = finalTotal
+
+  await order.save()
+
+  res.redirect(`/admin/orders/${id}`)
+})
 
 app.get("/logout", (req, res) => {
   req.session.destroy(() => {
@@ -794,6 +904,8 @@ app.get("/track/:id", async (req, res) => {
   const order = await Order.findById(req.params.id);
   res.render("track", { order });
 });
+
+
 app.get("/admin/orders/:id/invoice", async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -878,24 +990,26 @@ app.get("/admin/orders/:id/invoice", async (req, res) => {
     let y = tableTop + 25;
     doc.font("Helvetica");
 
-    order.products.forEach((p, i) => {
-      if (i % 2 === 0) {
-        doc.rect(itemX - 2, y - 2, 510, 20).fill("#F2F2F2");
-        doc.fillColor("black");
-      }
+   order.products.forEach((p, i) => {
 
-      const price = p.price || 0;
-      const qty = parseFloat(p.quantity) || 1;
-      const total = price * qty;
+  if (i % 2 === 0) {
+    doc.rect(itemX - 2, y - 2, 510, 20).fill("#F2F2F2");
+    doc.fillColor("black");
+  }
 
-      doc.text(i + 1, itemX, y);
-      doc.text(p.name, descX, y);
-      doc.text(p.quantity, qtyX, y);
-      doc.text(price.toFixed(2), priceX, y);
-      doc.text(total.toFixed(2), totalX, y);
+  const price = p.price || 0;
+  const qty = p.quantity || "";
+  const total = p.rowTotal || 0;
 
-      y += 25;
-    });
+  doc.text(i + 1, itemX, y);
+  doc.text(p.name, descX, y);
+  doc.text(qty, qtyX, y);
+  doc.text(price.toFixed(2), priceX, y);
+  doc.text(total.toFixed(2), totalX, y);
+
+  y += 25;
+
+});
 
     y += 10;
     doc.moveTo(300, y).lineTo(550, y).stroke();

@@ -1,8 +1,6 @@
- <% layout("/layouts/boilerplate.ejs") %>
+<% layout("/layouts/boilerplate.ejs") %>
 
 <style>
-   
-     
 /* ===== Page Background ===== */
 body {
     background: linear-gradient(120deg, #f8f9fa, #fff1f2);
@@ -14,12 +12,10 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 60vh;
-   
     position: relative;
     overflow: hidden;
 }
 
-/* decorative shape */
 .register-form-container::after {
     content: "";
     position: absolute;
@@ -28,17 +24,10 @@ body {
     border-radius: 50%;
     top: 10px;
     right: -160px;
-    
-
-    /* initial state */
     transform: scale(0);
-    
-    /* animated gradient */
     background: linear-gradient(45deg, purple, orangered);
-
     animation: circleGrow 2.4s ease-out forwards;
 }
-
 
 /* ===== Form Card ===== */
 .register-form {
@@ -51,8 +40,6 @@ body {
     flex-direction: column;
     gap: 18px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.12);
-
-    /* animation */
     opacity: 0;
     transform: translateY(30px);
     animation: slideFade 0.9s ease forwards;
@@ -65,7 +52,6 @@ body {
     }
 }
 
-/* ===== Heading ===== */
 .register-form h3 {
     text-align: center;
     font-size: 1.6rem;
@@ -73,7 +59,6 @@ body {
     color: #333;
 }
 
-/* ===== Inputs ===== */
 .register-form input {
     padding: 12px;
     font-size: 1rem;
@@ -89,7 +74,6 @@ body {
     transform: scale(1.02);
 }
 
-/* ===== Button ===== */
 .register-btn {
     position: relative;
     overflow: hidden;
@@ -104,7 +88,6 @@ body {
     transition: all 0.3s ease;
 }
 
-/* gradient layer */
 .register-btn::before {
     content: "";
     position: absolute;
@@ -116,7 +99,6 @@ body {
     z-index: -1;
 }
 
-/* hover effect */
 .register-btn:hover::before {
     transform: scaleX(0);
 }
@@ -128,12 +110,10 @@ body {
     box-shadow: 0 8px 20px rgba(255,69,0,0.4);
 }
 
-/* click effect */
 .register-btn:active {
     transform: scale(0.96);
 }
 
-/* ===== Login Link ===== */
 .register-form span {
     text-align: center;
     font-size: 0.95rem;
@@ -152,35 +132,12 @@ body {
     text-decoration: underline;
 }
 
-/* ===== Error Animation (future use) ===== */
-.shake {
-    animation: shake 0.4s;
-}
 @keyframes circleGrow {
-    0% {
-        transform: scale(0);
-        background: linear-gradient(45deg, #8c04ee, #ff4500);
-    }
-
-    50% {
-        transform: scale(1.1);
-        background: linear-gradient(45deg, #ff4500, #ffb703);
-    }
-
-    100% {
-        transform: scale(1);
-        background: linear-gradient(45deg, orangered, rgb(255, 21, 0));
-    }
+    0% { transform: scale(0); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
 
-
-@keyframes shake {
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
-}
-
-/* ===== Responsive ===== */
 @media (max-width: 750px) {
     .register-form-container {
         padding-top: 120px !important;
@@ -192,64 +149,75 @@ body {
         max-width: 100%;
     }
 }
-/* for circle animation */
+
 .register-form-container::before {
     content: "";
     position: absolute;
     width: 260px;
     height: 260px;
     border-radius: 50%;
-
-    /* left bottom position */
     bottom: -100px;
     left: -120px;
-
     transform: scale(0);
     background: linear-gradient(45deg, #00b4d8, #48cae4);
-
     animation: circleGrowLeft 1.6s ease-out forwards;
 }
+
 @keyframes circleGrowLeft {
-     0% {
-        transform: scale(0);
-        background: linear-gradient(45deg, #8c04ee, #ff4500);
-    }
-
-    50% {
-        transform: scale(1.1);
-        background: linear-gradient(45deg, #ff4500, #ffb703);
-    }
-
-    100% {
-        transform: scale(1);
-        background: linear-gradient(45deg, rgb(218, 80, 16), rgb(138, 11, 136));
-    }
+    0% { transform: scale(0); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
-
-
-
 </style>
-
-
 
 <div class="register-form-container">
 
-<form method="POST" action="/register" class="register-form"  style=" padding-top: 200px;" autocomplete="off">
+<form method="POST" action="/register" class="register-form" style="padding-top:200px;" autocomplete="off">
+
   <h3>User Registration</h3>
 
-  <input type="text" name="storeName" placeholder="Store Name" required>
+  <input 
+  type="text" 
+  name="storeName" 
+  placeholder="Store Name" 
+  required 
+  minlength="3"
+  title="Store name must be at least 3 characters">
 
-  <input type="text" name="ownerName" placeholder="Owner Name" required>
+  <input 
+  type="text" 
+  name="ownerName" 
+  placeholder="Owner Name" 
+  required 
+  minlength="3"
+  title="Owner name must be at least 3 characters">
 
-  <input type="email" name="email" placeholder="Email" required autocomplete="new-email">
+  <input 
+  type="email" 
+  name="email" 
+  placeholder="Email" 
+  required 
+  autocomplete="new-email">
 
-  <input type="text" name="phone" placeholder="Phone" required>
+  <input 
+  type="tel" 
+  name="phone" 
+  placeholder="Phone" 
+  required 
+  pattern="[6-9][0-9]{9}"
+  title="Enter valid 10 digit mobile number">
 
-  <input type="password" name="password" placeholder="Password" required autocomplete="new-password">
+  <input 
+  type="password" 
+  name="password" 
+  placeholder="Password" 
+  required 
+  autocomplete="new-password">
 
   <button type="submit" class="register-btn">Register</button>
 
   <p>Already registered? <a href="/login">Login</a></p>
+
 </form>
 
-
+</div>
