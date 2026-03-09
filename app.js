@@ -16,24 +16,24 @@ const fs = require("fs");
 
 // MongoDB connection
 
-mongoose
-  .connect("mongodb://localhost:27017/shreeram", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((err) => {
-    console.error("MongoDB connection error:", err);
-  });
+// mongoose
+//   .connect("mongodb://localhost:27017/shreeram", {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .then(() => {
+//     console.log("Connected to MongoDB");
+//   })
+//   .catch((err) => {
+//     console.error("MongoDB connection error:", err);
+//   });
 //for .env file
 
   require("dotenv").config();
 
-// mongoose.connect(process.env.MONGO_URL)
-//   .then(() => console.log("MongoDB Connected"))
-//   .catch(err => console.log("MongoDB Error:", err));
+mongoose.connect(process.env.MONGO_URL)
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.log("MongoDB Error:", err));
 
 
 
